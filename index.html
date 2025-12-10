@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kombat Wear - Excelencia en Indumentaria</title>
+    <title>Kombat Wear - Forjamos la Vestidura de los que no se Rinden</title>
     <style>
         * {
             margin: 0;
@@ -53,7 +53,7 @@
 
         .logo {
             font-size: 4rem;
-            font-weight: 300;
+            font-weight: 700;
             letter-spacing: 0.3rem;
             margin-bottom: 1rem;
             text-transform: uppercase;
@@ -61,12 +61,16 @@
         }
 
         .tagline {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 300;
-            letter-spacing: 0.2rem;
+            letter-spacing: 0.15rem;
             margin-bottom: 3rem;
             color: #e5e5e5;
             animation: fadeInUp 1s ease 0.3s both;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
         }
 
         .cta-button {
@@ -81,6 +85,7 @@
             transition: all 0.3s ease;
             animation: fadeInUp 1s ease 0.6s both;
             cursor: pointer;
+            text-transform: uppercase;
         }
 
         .cta-button:hover {
@@ -120,10 +125,6 @@
             padding: 8rem 2rem 6rem 2rem;
             scroll-margin-top: 0;
         }
-        
-        .products-section {
-            padding-top: 10rem;
-        }
 
         .container {
             max-width: 1200px;
@@ -146,9 +147,10 @@
             font-weight: 300;
         }
 
-        /* Nuevos estilos para productos */
+        /* Productos con diseño diagonal */
         .products-section {
             background: white;
+            padding-top: 10rem;
         }
 
         .product-showcase {
@@ -170,6 +172,7 @@
             flex-direction: row-reverse;
         }
 
+        /* Carrusel integrado en el producto */
         .product-image-container {
             flex: 1;
             position: relative;
@@ -177,27 +180,41 @@
             overflow: hidden;
         }
 
-        .product-image-wrapper {
+        .product-carousel {
             position: relative;
             width: 100%;
             height: 100%;
             clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
             background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 50%, #3a3a3a 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.6s ease;
+            overflow: hidden;
         }
 
-        .product-showcase:nth-child(even) .product-image-wrapper {
+        .product-showcase:nth-child(even) .product-carousel {
             clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
         }
 
-        .product-showcase:hover .product-image-wrapper {
-            transform: scale(1.05);
+        .carousel-wrapper {
+            display: flex;
+            height: 100%;
+            transition: transform 0.6s ease-in-out;
         }
 
-        .product-image-wrapper::before {
+        .carousel-slide {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .carousel-slide img {
+            max-width: 80%;
+            max-height: 80%;
+            object-fit: contain;
+        }
+
+        .carousel-slide::before {
             content: '';
             position: absolute;
             top: 0;
@@ -208,13 +225,59 @@
             transition: left 0.7s;
         }
 
-        .product-showcase:hover .product-image-wrapper::before {
+        .product-showcase:hover .carousel-slide::before {
             left: 100%;
         }
 
-        .product-placeholder {
-            font-size: 8rem;
-            color: rgba(255,255,255,0.2);
+        .carousel-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.8rem;
+            z-index: 10;
+        }
+
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-dot.active {
+            background: #dc2626;
+            transform: scale(1.3);
+        }
+
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .carousel-arrow:hover {
+            background: rgba(220, 38, 38, 0.8);
+        }
+
+        .carousel-arrow.prev {
+            left: 20px;
+        }
+
+        .carousel-arrow.next {
+            right: 20px;
         }
 
         .product-details {
@@ -266,6 +329,17 @@
             font-weight: bold;
         }
 
+        .product-badge {
+            display: inline-block;
+            background: #f9fafb;
+            color: #dc2626;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-left: 3px solid #dc2626;
+            margin-top: 1rem;
+        }
+
         .product-cta {
             display: inline-block;
             padding: 0.8rem 2rem;
@@ -276,6 +350,7 @@
             letter-spacing: 0.1rem;
             border: 2px solid #dc2626;
             transition: all 0.3s ease;
+            margin-top: 1rem;
         }
 
         .product-cta:hover {
@@ -284,47 +359,48 @@
             transform: translateX(5px);
         }
 
+        /* Sobre Nosotros */
         .about {
             background: #f9fafb;
         }
 
-        .features {
+        .about-content {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
-            margin-top: 3rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
         }
 
-        .feature {
-            text-align: center;
-            padding: 2rem;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
-        }
-
-        .feature.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+        .about-text h3 {
+            font-size: 2rem;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
             color: #dc2626;
         }
 
-        .feature-title {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-            font-weight: 400;
+        .about-text p {
+            color: #555;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
         }
 
-        .feature-text {
-            color: #666;
-            line-height: 1.6;
+        .business-types {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
         }
 
+        .business-badge {
+            background: white;
+            padding: 1rem 2rem;
+            border-left: 3px solid #dc2626;
+            font-weight: 600;
+            color: #1a1a1a;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        /* Contacto */
         .contact {
             background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
             color: white;
@@ -532,11 +608,11 @@
 
             .product-image-container {
                 width: 100%;
-                height: 350px;
+                height: 400px;
             }
 
-            .product-image-wrapper,
-            .product-showcase:nth-child(even) .product-image-wrapper {
+            .product-carousel,
+            .product-showcase:nth-child(even) .product-carousel {
                 clip-path: polygon(0 0, 100% 0, 100% 90%, 0% 100%);
             }
 
@@ -548,10 +624,15 @@
                 padding: 1rem;
             }
 
-            .contact-info {
+            .about-content {
+                grid-template-columns: 1fr;
                 gap: 2rem;
             }
-            
+
+            .business-types {
+                flex-direction: column;
+            }
+
             .contact-wrapper {
                 grid-template-columns: 1fr;
                 gap: 3rem;
@@ -600,11 +681,7 @@
             }
             
             .product-image-container {
-                height: 300px;
-            }
-            
-            .product-placeholder {
-                font-size: 6rem;
+                height: 350px;
             }
             
             .product-name {
@@ -619,6 +696,12 @@
                 font-size: 1rem;
                 margin-bottom: 3rem;
             }
+
+            .carousel-arrow {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
         }
         
         @media (max-width: 480px) {
@@ -630,26 +713,30 @@
                 padding: 0.8rem 2rem;
                 font-size: 0.9rem;
             }
-            
+
             .product-showcase {
                 margin-bottom: 3rem;
             }
-            
-            .contact-item {
-                min-width: 150px;
-                padding: 1.5rem;
-            }
-            
-            .contact-wrapper {
-                gap: 2rem;
-            }
-            
-            .contact-form-section {
-                padding: 1.5rem;
+
+            .product-image-container {
+                height: 300px;
             }
             
             .form-title {
                 font-size: 1.5rem;
+            }
+
+            .carousel-arrow {
+                width: 30px;
+                height: 30px;
+            }
+
+            .carousel-arrow.prev {
+                left: 10px;
+            }
+
+            .carousel-arrow.next {
+                right: 10px;
             }
         }
     </style>
@@ -658,135 +745,221 @@
     <section class="hero">
         <div class="hero-content">
             <h1 class="logo">Kombat Wear</h1>
-            <p class="tagline">Performance Gear</p>
-            <a href="#productos" class="cta-button">EXPLORAR COLECCIÓN</a>
+            <p class="tagline">Forjamos la vestidura de los que no se rinden</p>
+            <a href="#productos" class="cta-button">Ver Productos</a>
         </div>
         <div class="scroll-indicator">↓</div>
     </section>
 
     <section id="productos" class="section products-section">
         <div class="container">
-            <h2 class="section-title">Nuestra Colección</h2>
+            <h2 class="section-title">Nuestros Productos</h2>
             <p class="section-subtitle">Indumentaria diseñada para la excelencia en cada disciplina</p>
             
+            <!-- Kimono -->
             <div class="product-showcase">
                 <div class="product-image-container">
-                    <div class="product-image-wrapper">
-                        <div class="product-placeholder">🥋</div>
+                    <div class="product-carousel">
+                        <div class="carousel-wrapper" data-product="kimono">
+                            <div class="carousel-slide">
+                                <img src="assets\kimono-frente.png" alt="Kimono Frente">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="assets\kimono-lateral.png" alt="Kimono Lateral">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="assets\kimono-atras.png" alt="Kimono Atrás">
+                            </div>
+                        </div>
+                        <button class="carousel-arrow prev" data-product="kimono">‹</button>
+                        <button class="carousel-arrow next" data-product="kimono">›</button>
+                        <div class="carousel-controls">
+                            <span class="carousel-dot active" data-product="kimono" data-slide="0"></span>
+                            <span class="carousel-dot" data-product="kimono" data-slide="1"></span>
+                            <span class="carousel-dot" data-product="kimono" data-slide="2"></span>
+                        </div>
                     </div>
                 </div>
                 <div class="product-details">
                     <div class="product-category">Tradicional</div>
-                    <h3 class="product-name">Gi Premium</h3>
+                    <h3 class="product-name">Kimonos</h3>
                     <p class="product-description">
-                        Nuestro gi tradicional representa la perfecta fusión entre respeto a la tradición y excelencia en manufactura. Confeccionado con algodón 100% de alta densidad, cada pieza es sometida a rigurosos controles de calidad.
+                        Kimonos de competición certificados para torneos nacionales e internacionales. Confeccionados con algodón 100% de alta densidad, cada pieza es sometida a rigurosos controles de calidad.
                     </p>
                     <ul class="product-features">
                         <li>Tela de algodón peinado de 450gsm</li>
                         <li>Costuras reforzadas en triple puntada</li>
                         <li>Corte anatómico para máxima movilidad</li>
                         <li>Pre-encogido y listo para competición</li>
+                        <li>Aptos para competiciones nacionales e internacionales</li>
                     </ul>
+                    <div class="product-badge">MAYORISTA & MINORISTA</div>
+                    <br>
                     <a href="#contacto" class="product-cta">CONSULTAR</a>
                 </div>
             </div>
 
+            <!-- Cinturones -->
             <div class="product-showcase">
                 <div class="product-image-container">
-                    <div class="product-image-wrapper">
-                        <div class="product-placeholder">👕</div>
+                    <div class="product-carousel">
+                        <div class="carousel-wrapper" data-product="cinturones">
+                            <div class="carousel-slide">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f0f0f0' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3ECinturón Blanco%3C/text%3E%3C/svg%3E" alt="Cinturón">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f0f0f0' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3ECinturón Azul%3C/text%3E%3C/svg%3E" alt="Cinturón">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f0f0f0' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3ECinturón Negro%3C/text%3E%3C/svg%3E" alt="Cinturón">
+                            </div>
+                        </div>
+                        <button class="carousel-arrow prev" data-product="cinturones">‹</button>
+                        <button class="carousel-arrow next" data-product="cinturones">›</button>
+                        <div class="carousel-controls">
+                            <span class="carousel-dot active" data-product="cinturones" data-slide="0"></span>
+                            <span class="carousel-dot" data-product="cinturones" data-slide="1"></span>
+                            <span class="carousel-dot" data-product="cinturones" data-slide="2"></span>
+                        </div>
                     </div>
                 </div>
                 <div class="product-details">
-                    <div class="product-category">Performance</div>
-                    <h3 class="product-name">Rashguard Pro</h3>
+                    <div class="product-category">Graduación</div>
+                    <h3 class="product-name">Cinturones</h3>
                     <p class="product-description">
-                        Tecnología de última generación aplicada al deporte de contacto. Nuestro rashguard combina compresión inteligente con tejidos técnicos que regulan la temperatura y eliminan la humedad.
+                        Cinturones de graduación en todos los colores. Fabricados con algodón resistente y costuras reforzadas que garantizan durabilidad a lo largo de tu camino en las artes marciales.
                     </p>
                     <ul class="product-features">
-                        <li>Tejido antimicrobiano y anti-olor</li>
-                        <li>Compresión gradual para mejor circulación</li>
-                        <li>Costuras planas para cero rozaduras</li>
-                        <li>Protección UV50+ integrada</li>
+                        <li>Algodón 100% de alta densidad</li>
+                        <li>Todos los colores de graduación disponibles</li>
+                        <li>Costuras reforzadas en los extremos</li>
+                        <li>Largo y ancho según estándar internacional</li>
+                        <li>Opción de bordado personalizado</li>
                     </ul>
+                    <div class="product-badge">MAYORISTA & MINORISTA</div>
+                    <br>
                     <a href="#contacto" class="product-cta">CONSULTAR</a>
                 </div>
             </div>
 
+            <!-- Dry Fit -->
             <div class="product-showcase">
                 <div class="product-image-container">
-                    <div class="product-image-wrapper">
-                        <div class="product-placeholder">🥊</div>
-                    </div>
-                </div>
-                <div class="product-details">
-                    <div class="product-category">Combat</div>
-                    <h3 class="product-name">Fight Shorts</h3>
-                    <p class="product-description">
-                        Diseñados específicamente para MMA y artes marciales mixtas. Cada detalle está pensado para ofrecer libertad de movimiento absoluta sin comprometer la durabilidad durante el entrenamiento más intenso.
-                    </p>
-                    <ul class="product-features">
-                        <li>Paneles elásticos de 4 direcciones</li>
-                        <li>Sistema de cierre doble seguridad</li>
-                        <li>Costuras reforzadas con tecnología Flatlock</li>
-                        <li>Diseño ergonómico para patadas altas</li>
-                    </ul>
-                    <a href="#contacto" class="product-cta">CONSULTAR</a>
-                </div>
-            </div>
-
-            <div class="product-showcase">
-                <div class="product-image-container">
-                    <div class="product-image-wrapper">
-                        <div class="product-placeholder">🎽</div>
+                    <div class="product-carousel">
+                        <div class="carousel-wrapper" data-product="dryfit">
+                            <div class="carousel-slide">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f0f0f0' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3EDry Fit Frente%3C/text%3E%3C/svg%3E" alt="Dry Fit Frente">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f0f0f0' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3EDry Fit Lateral%3C/text%3E%3C/svg%3E" alt="Dry Fit Lateral">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f0f0f0' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3EDry Fit Atrás%3C/text%3E%3C/svg%3E" alt="Dry Fit Atrás">
+                            </div>
+                        </div>
+                        <button class="carousel-arrow prev" data-product="dryfit">‹</button>
+                        <button class="carousel-arrow next" data-product="dryfit">›</button>
+                        <div class="carousel-controls">
+                            <span class="carousel-dot active" data-product="dryfit" data-slide="0"></span>
+                            <span class="carousel-dot" data-product="dryfit" data-slide="1"></span>
+                            <span class="carousel-dot" data-product="dryfit" data-slide="2"></span>
+                        </div>
                     </div>
                 </div>
                 <div class="product-details">
                     <div class="product-category">Training</div>
-                    <h3 class="product-name">Training Gear</h3>
+                    <h3 class="product-name">Remeras Dry Fit</h3>
                     <p class="product-description">
-                        Línea completa de indumentaria para entrenamiento diario. Desde remeras técnicas hasta pantalones de calentamiento, cada prenda está diseñada para acompañarte en tu camino hacia la maestría.
+                        Remeras técnicas con tecnología de secado rápido. Perfectas para entrenamientos intensos y uso diario, ofrecen máximo confort y transpirabilidad en cualquier condición.
                     </p>
                     <ul class="product-features">
-                        <li>Telas de secado rápido</li>
-                        <li>Cortes ergonómicos modernos</li>
-                        <li>Durabilidad probada en lavados intensivos</li>
-                        <li>Diseños versátiles para dojo y calle</li>
+                        <li>Tecnología de secado ultrarrápido</li>
+                        <li>Tejido liviano y transpirable</li>
+                        <li>Control de humedad avanzado</li>
+                        <li>Corte ergonómico moderno</li>
+                        <li>Ideal para entrenamiento y uso casual</li>
                     </ul>
+                    <div class="product-badge" style="background: #1a1a1a; color: white;">SOLO MINORISTA</div>
+                    <br>
                     <a href="#contacto" class="product-cta">CONSULTAR</a>
                 </div>
             </div>
+
+            <!-- Remeras Algodón -->
+            <div class="product-showcase">
+                <div class="product-image-container">
+                    <div class="product-carousel">
+                        <div class="carousel-wrapper" data-product="algodon">
+                            <div class="carousel-slide">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f0f0f0' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3ERemera Frente%3C/text%3E%3C/svg%3E" alt="Remera Frente">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f0f0f0' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3ERemera Lateral%3C/text%3E%3C/svg%3E" alt="Remera Lateral">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f0f0f0' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3ERemera Atrás%3C/text%3E%3C/svg%3E" alt="Remera Atrás">
+                            </div>
+                        </div>
+                        <button class="carousel-arrow prev" data-product="algodon">‹</button>
+                        <button class="carousel-arrow next" data-product="algodon">›</button>
+                        <div class="carousel-controls">
+                            <span class="carousel-dot active" data-product="algodon" data-slide="0"></span>
+                            <span class="carousel-dot" data-product="algodon" data-slide="1"></span>
+                            <span class="carousel-dot" data-product="algodon" data-slide="2"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-details">
+                    <div class="product-category">Lifestyle</div>
+                    <h3 class="product-name">Remeras Algodón</h3>
+                    <p class="product-description">
+                        Remeras 100% algodón de alta calidad. Ideales para uso casual y representación de tu academia o equipo. Comodidad clásica con estilo deportivo.
+                    </p>
+                    <ul class="product-features">
+                        <li>Algodón 100% peinado premium</li>
+                        <li>Cuello reforzado que no se deforma</li>
+                        <li>Tacto suave y confortable</li>
+                        <li>Estampados de alta durabilidad</li>
+                        <li>Cortes clásicos y modernos</li>
+                    </ul>
+                    <div class="product-badge" style="background: #1a1a1a; color: white;">SOLO MINORISTA</div>
+                    <br>
+                    <a href="#contacto" class="product-cta">CONSULTAR</a>
+                </div>
+            </div>
+
         </div>
     </section>
 
     <section id="nosotros" class="section about">
         <div class="container">
-            <h2 class="section-title">¿Por Qué Kombat Wear?</h2>
-            <p class="section-subtitle">Calidad que se siente en cada movimiento</p>
+            <h2 class="section-title">Sobre Nosotros</h2>
+            <p class="section-subtitle">Fabricantes de excelencia en indumentaria para artes marciales</p>
             
-            <div class="features">
-                <div class="feature">
-                    <div class="feature-icon">✨</div>
-                    <h3 class="feature-title">Calidad Premium</h3>
-                    <p class="feature-text">Seleccionamos únicamente las mejores telas y materiales para garantizar durabilidad y confort excepcional en cada prenda.</p>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Somos Fabricantes</h3>
+                    <p>
+                        En Kombat Wear no somos intermediarios. Diseñamos, desarrollamos y fabricamos cada prenda con los más altos estándares de calidad. Nuestro control directo del proceso de producción nos permite garantizar la excelencia en cada detalle.
+                    </p>
+                    <p>
+                        Con años de experiencia en el mercado de indumentaria deportiva para artes marciales, hemos perfeccionado nuestras técnicas y materiales para ofrecer productos que superan las expectativas de atletas y competidores.
+                    </p>
+                    
+                    <div class="business-types">
+                        <div class="business-badge">MAYORISTA</div>
+                        <div class="business-badge">MINORISTA</div>
+                    </div>
                 </div>
-
-                <div class="feature">
-                    <div class="feature-icon">⚡</div>
-                    <h3 class="feature-title">Diseño Funcional</h3>
-                    <p class="feature-text">Cada prenda está diseñada pensando en el rendimiento, combinando tradición con innovación técnica y ergonomía.</p>
-                </div>
-
-                <div class="feature">
-                    <div class="feature-icon">🎯</div>
-                    <h3 class="feature-title">Fabricación Artesanal</h3>
-                    <p class="feature-text">Proceso de manufactura cuidadoso con atención al detalle en cada costura y acabado para asegurar la máxima calidad.</p>
-                </div>
-
-                <div class="feature">
-                    <div class="feature-icon">🌟</div>
-                    <h3 class="feature-title">Personalización</h3>
-                    <p class="feature-text">Ofrecemos servicios de personalización y bordado para escuelas, equipos y academias de artes marciales.</p>
+                
+                <div class="about-text">
+                    <h3>Nuestro Compromiso</h3>
+                    <p>
+                        Trabajamos con las mejores materias primas y aplicamos rigurosos controles de calidad en cada etapa del proceso. Desde la selección de telas hasta las costuras finales, cada kimono, lycra o short pasa por múltiples inspecciones.
+                    </p>
+                    <p>
+                        Nos especializamos en atender tanto a distribuidores mayoristas como a clientes individuales, ofreciendo la misma calidad premium en cada pedido, sin importar su tamaño.
+                    </p>
                 </div>
             </div>
         </div>
@@ -794,8 +967,8 @@
 
     <section id="contacto" class="section contact">
         <div class="container">
-            <h2 class="section-title">Conectá con Nosotros</h2>
-            <p class="section-subtitle">Estamos listos para equipar tu pasión por las artes marciales</p>
+            <h2 class="section-title">Contactanos</h2>
+            <p class="section-subtitle">Estamos listos para equipar tu camino en las artes marciales</p>
             
             <div class="contact-wrapper">
                 <div class="contact-form-section">
@@ -867,15 +1040,131 @@
     </section>
 
     <footer>
-        <p>&copy; 2025 Kombat Wear. Todos los derechos reservados.</p>
+        <p>&copy; 2024 Kombat Wear. Forjamos la vestidura de los que no se rinden.</p>
     </footer>
 
     <script>
-        // Manejo del formulario de contacto
+        // Sistema de carruseles independientes para cada producto
+        const carousels = {};
+        
+        // Inicializar cada carrusel
+        document.querySelectorAll('[data-product]').forEach(elem => {
+            const productName = elem.getAttribute('data-product');
+            
+            if (!carousels[productName]) {
+                carousels[productName] = {
+                    currentSlide: 0,
+                    totalSlides: 3,
+                    autoInterval: null
+                };
+            }
+        });
+
+        function goToSlide(productName, index) {
+            const carousel = carousels[productName];
+            carousel.currentSlide = index;
+            
+            const wrapper = document.querySelector(`.carousel-wrapper[data-product="${productName}"]`);
+            wrapper.style.transform = `translateX(-${carousel.currentSlide * 100}%)`;
+            
+            const dots = document.querySelectorAll(`.carousel-dot[data-product="${productName}"]`);
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === carousel.currentSlide);
+            });
+        }
+
+        function nextSlide(productName) {
+            const carousel = carousels[productName];
+            carousel.currentSlide = (carousel.currentSlide + 1) % carousel.totalSlides;
+            goToSlide(productName, carousel.currentSlide);
+        }
+
+        function prevSlide(productName) {
+            const carousel = carousels[productName];
+            carousel.currentSlide = (carousel.currentSlide - 1 + carousel.totalSlides) % carousel.totalSlides;
+            goToSlide(productName, carousel.currentSlide);
+        }
+
+        function startAutoSlide(productName) {
+            const carousel = carousels[productName];
+            stopAutoSlide(productName);
+            carousel.autoInterval = setInterval(() => nextSlide(productName), 4000);
+        }
+
+        function stopAutoSlide(productName) {
+            const carousel = carousels[productName];
+            if (carousel.autoInterval) {
+                clearInterval(carousel.autoInterval);
+                carousel.autoInterval = null;
+            }
+        }
+
+        // Event listeners para dots
+        document.querySelectorAll('.carousel-dot').forEach(dot => {
+            dot.addEventListener('click', () => {
+                const productName = dot.getAttribute('data-product');
+                const slideIndex = parseInt(dot.getAttribute('data-slide'));
+                stopAutoSlide(productName);
+                goToSlide(productName, slideIndex);
+                startAutoSlide(productName);
+            });
+        });
+
+        // Event listeners para flechas
+        document.querySelectorAll('.carousel-arrow.prev').forEach(arrow => {
+            arrow.addEventListener('click', () => {
+                const productName = arrow.getAttribute('data-product');
+                stopAutoSlide(productName);
+                prevSlide(productName);
+                startAutoSlide(productName);
+            });
+        });
+
+        document.querySelectorAll('.carousel-arrow.next').forEach(arrow => {
+            arrow.addEventListener('click', () => {
+                const productName = arrow.getAttribute('data-product');
+                stopAutoSlide(productName);
+                nextSlide(productName);
+                startAutoSlide(productName);
+            });
+        });
+
+        // Pausar en hover para cada carrusel
+        document.querySelectorAll('.product-carousel').forEach(carousel => {
+            const wrapper = carousel.querySelector('.carousel-wrapper');
+            const productName = wrapper.getAttribute('data-product');
+            
+            carousel.addEventListener('mouseenter', () => stopAutoSlide(productName));
+            carousel.addEventListener('mouseleave', () => startAutoSlide(productName));
+        });
+
+        // Iniciar todos los carruseles
+        Object.keys(carousels).forEach(productName => {
+            startAutoSlide(productName);
+        });
+
+        // Intersection Observer para animaciones
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.product-showcase').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Formulario
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Simulación de envío exitoso
             const button = this.querySelector('.form-button');
             const originalText = button.textContent;
             
@@ -895,46 +1184,19 @@
             }, 1500);
         });
 
-        // Smooth scroll para CTA con offset para ver el título
+        // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    const yOffset = 0; 
-                    const y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    const y = target.getBoundingClientRect().top + window.pageYOffset;
                     window.scrollTo({ top: y, behavior: 'smooth' });
                 }
             });
         });
 
-        // Intersection Observer para animaciones
-        const observerOptions = {
-            threshold: 0.15,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.classList.add('visible');
-                    }, index * 100);
-                }
-            });
-        }, observerOptions);
-
-        // Observar productos
-        document.querySelectorAll('.product-showcase').forEach(el => {
-            observer.observe(el);
-        });
-
-        // Observar features
-        document.querySelectorAll('.feature').forEach(el => {
-            observer.observe(el);
-        });
-
-        // Parallax suave en scroll
+        // Parallax en hero
         let ticking = false;
         window.addEventListener('scroll', () => {
             if (!ticking) {
