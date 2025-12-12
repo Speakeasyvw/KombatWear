@@ -3,1303 +3,726 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kombat Wear - Forjamos la Vestidura de los que no se Rinden</title>
+    <title>Kombat Wear - Performance Combat Gear</title>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --primary: #dc2626;
+            --dark: #0a0a0a;
+            --card-bg: #121212;
+            --text: #e5e5e5;
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* Smooth Scroll */
+        html { scroll-behavior: smooth; }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #1a1a1a;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--dark);
+            color: var(--text);
             overflow-x: hidden;
         }
 
+        /* Fade In Animations on Scroll */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                        transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- HERO SECTION (FONDO 3D) --- */
         .hero {
+            position: relative;
             height: 100vh;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            overflow: hidden;
+            background: #000;
+            overflow: hidden; 
         }
 
-        .hero::before {
-            content: '';
+        #bg-canvas {
             position: absolute;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(220,38,38,0.15) 0%, transparent 70%);
-            border-radius: 50%;
-            top: -250px;
-            right: -250px;
-            animation: pulse 4s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 0.8; }
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
         }
 
         .hero-content {
+            position: relative;
+            z-index: 2;
             text-align: center;
-            color: white;
-            z-index: 1;
             padding: 2rem;
+            background: radial-gradient(circle, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 80%);
         }
 
-        .logo {
-            font-size: 4rem;
+        /* LOGO ESTILIZADO */
+        .brand-logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100px; height: 100px;
+            border: 4px solid var(--primary);
+            color: var(--primary);
+            font-family: 'Teko', sans-serif;
+            font-size: 4.5rem;
             font-weight: 700;
-            letter-spacing: 0.3rem;
             margin-bottom: 1rem;
-            text-transform: uppercase;
+            background: rgba(0,0,0,0.5);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
             animation: fadeInDown 1s ease;
         }
 
+        .logo-text {
+            font-family: 'Teko', sans-serif;
+            font-size: 5rem;
+            text-transform: uppercase;
+            line-height: 0.9;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(0,0,0,0.8);
+            animation: fadeInDown 1s ease 0.2s both;
+        }
+
+        .logo-text span { color: var(--primary); }
+
         .tagline {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 300;
-            letter-spacing: 0.15rem;
+            letter-spacing: 1px;
+            color: #ccc;
             margin-bottom: 3rem;
-            color: #e5e5e5;
-            animation: fadeInUp 1s ease 0.3s both;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.6;
+            text-transform: uppercase;
+            animation: fadeInUp 1s ease 0.4s both;
         }
 
         .cta-button {
             display: inline-block;
             padding: 1rem 3rem;
-            background: #dc2626;
             color: white;
+            font-family: 'Teko', sans-serif;
+            font-size: 1.5rem;
             text-decoration: none;
-            font-size: 1.1rem;
-            letter-spacing: 0.1rem;
-            border: 2px solid #dc2626;
-            transition: all 0.3s ease;
+            border: 2px solid var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            background: rgba(220, 38, 38, 0.1);
             animation: fadeInUp 1s ease 0.6s both;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-
-        .cta-button:hover {
-            background: transparent;
-            border-color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(220, 38, 38, 0.3);
-        }
-
-        .scroll-indicator {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            font-size: 2rem;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
-            40% { transform: translateX(-50%) translateY(-10px); }
-            60% { transform: translateX(-50%) translateY(-5px); }
-        }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .section {
-            padding: 8rem 2rem 6rem 2rem;
-            scroll-margin-top: 0;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            font-weight: 300;
-            text-align: center;
-            margin-bottom: 1rem;
-            letter-spacing: 0.1rem;
-        }
-
-        .section-subtitle {
-            text-align: center;
-            color: #666;
-            font-size: 1.1rem;
-            margin-bottom: 4rem;
-            font-weight: 300;
-        }
-
-        /* Productos con diseño diagonal */
-        .products-section {
-            background: white;
-            padding-top: 10rem;
-        }
-
-        .product-showcase {
-            display: flex;
-            align-items: center;
-            gap: 4rem;
-            margin-bottom: 8rem;
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s ease;
-        }
-
-        .product-showcase.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .product-showcase:nth-child(even) {
-            flex-direction: row-reverse;
-        }
-
-        /* Carrusel integrado en el producto */
-        .product-image-container {
-            flex: 1;
-            position: relative;
-            height: 500px;
-            overflow: hidden;
-        }
-
-        .product-carousel {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
-            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 50%, #3a3a3a 100%);
-            overflow: hidden;
-        }
-
-        .product-showcase:nth-child(even) .product-carousel {
-            clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
-        }
-
-        .carousel-wrapper {
-            display: flex;
-            height: 100%;
-            transition: transform 0.6s ease-in-out;
-        }
-
-        .carousel-slide {
-            min-width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .carousel-slide img {
-            max-width: 80%;
-            max-height: 80%;
-            object-fit: contain;
-        }
-
-        .carousel-slide::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: left 0.7s;
-        }
-
-        .product-showcase:hover .carousel-slide::before {
-            left: 100%;
-        }
-
-        .carousel-controls {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 0.8rem;
-            z-index: 10;
-        }
-
-        .carousel-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .carousel-dot.active {
-            background: #dc2626;
-            transform: scale(1.3);
-        }
-
-        .carousel-arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255,255,255,0.1);
-            color: white;
-            border: none;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-            z-index: 10;
-        }
-
-        .carousel-arrow:hover {
-            background: rgba(220, 38, 38, 0.8);
-        }
-
-        .carousel-arrow.prev {
-            left: 20px;
-        }
-
-        .carousel-arrow.next {
-            right: 20px;
-        }
-
-        .product-details {
-            flex: 1;
-            padding: 2rem;
-        }
-
-        .product-category {
-            color: #dc2626;
-            font-size: 0.9rem;
-            font-weight: 600;
-            letter-spacing: 0.15rem;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-        }
-
-        .product-name {
-            font-size: 2.5rem;
-            font-weight: 300;
-            margin-bottom: 1.5rem;
-            letter-spacing: 0.05rem;
-        }
-
-        .product-description {
-            color: #666;
-            line-height: 1.8;
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-        }
-
-        .product-features {
-            list-style: none;
-            margin-bottom: 2rem;
-        }
-
-        .product-features li {
-            color: #444;
-            padding: 0.5rem 0;
-            padding-left: 1.5rem;
-            position: relative;
-            line-height: 1.6;
-        }
-
-        .product-features li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: #dc2626;
-            font-weight: bold;
-        }
-
-        .product-badge {
-            display: inline-block;
-            background: #f9fafb;
-            color: #dc2626;
-            padding: 0.5rem 1rem;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border-left: 3px solid #dc2626;
-            margin-top: 1rem;
-        }
-
-        .product-cta {
-            display: inline-block;
-            padding: 0.8rem 2rem;
-            background: transparent;
-            color: #dc2626;
-            text-decoration: none;
-            font-size: 1rem;
-            letter-spacing: 0.1rem;
-            border: 2px solid #dc2626;
-            transition: all 0.3s ease;
-            margin-top: 1rem;
-        }
-
-        .product-cta:hover {
-            background: #dc2626;
-            color: white;
-            transform: translateX(5px);
-        }
-
-        /* Sobre Nosotros */
-        .about {
-            background: #f9fafb;
-        }
-
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: start;
-        }
-
-        .about-text h3 {
-            font-size: 2rem;
-            font-weight: 400;
-            margin-bottom: 1.5rem;
-            color: #dc2626;
-        }
-
-        .about-text p {
-            color: #555;
-            line-height: 1.8;
-            font-size: 1.1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .business-types {
-            display: flex;
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .business-badge {
-            background: white;
-            padding: 1rem 2rem;
-            border-left: 3px solid #dc2626;
-            font-weight: 600;
-            color: #1a1a1a;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        /* Contacto */
-        .contact {
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-            color: white;
             position: relative;
             overflow: hidden;
-        }
-
-        .contact::before {
-            content: '';
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(220,38,38,0.1) 0%, transparent 70%);
-            border-radius: 50%;
-            bottom: -300px;
-            left: -300px;
-        }
-
-        .contact .container {
-            position: relative;
             z-index: 1;
         }
 
-        .contact .section-subtitle {
-            color: #999;
-            margin-bottom: 5rem;
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--primary);
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+            z-index: -1;
+            border-radius: 50%;
         }
 
-        .contact-wrapper {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 5rem;
-            align-items: start;
+        .cta-button:hover::before {
+            width: 300%;
+            height: 300%;
         }
 
-        .contact-form-section {
-            background: rgba(255,255,255,0.03);
-            padding: 3rem;
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-        }
-
-        .form-title {
-            font-size: 1.8rem;
-            font-weight: 300;
-            margin-bottom: 0.5rem;
-            letter-spacing: 0.05rem;
-        }
-
-        .form-subtitle {
-            color: #999;
-            margin-bottom: 2rem;
-            font-size: 0.95rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #e5e5e5;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1rem;
-        }
-
-        .form-input,
-        .form-textarea {
-            width: 100%;
-            padding: 1rem;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: white;
-            font-family: inherit;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .form-input:focus,
-        .form-textarea:focus {
-            outline: none;
-            border-color: #dc2626;
-            background: rgba(255,255,255,0.08);
-        }
-
-        .form-textarea {
-            resize: vertical;
-            min-height: 120px;
-        }
-
-        .form-button {
-            width: 100%;
-            padding: 1.2rem;
-            background: #dc2626;
-            color: white;
-            border: none;
-            font-size: 1rem;
-            letter-spacing: 0.1rem;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
-
-        .form-button:hover {
-            background: #b91c1c;
+        .cta-button:hover {
+            box-shadow: 0 0 40px rgba(220, 38, 38, 0.6);
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(220, 38, 38, 0.4);
         }
 
-        .contact-info-section {
-            display: flex;
-            flex-direction: column;
-            gap: 3rem;
+        .scroll-indicator {
+            position: absolute; bottom: 30px; left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            animation: bounce 2s infinite;
+            font-size: 2rem; color: var(--primary);
         }
 
-        .info-block {
-            display: flex;
-            align-items: flex-start;
-            gap: 1.5rem;
-            padding: 2rem;
-            background: rgba(255,255,255,0.03);
-            border-left: 3px solid #dc2626;
-            transition: all 0.3s ease;
-        }
+        /* --- SECCIÓN PRODUCTOS (LAYOUT CORREGIDO) --- */
+        .section { padding: 6rem 1rem; }
+        .container { max-width: 1200px; margin: 0 auto; }
 
-        .info-block:hover {
-            background: rgba(255,255,255,0.06);
-            transform: translateX(5px);
-        }
-
-        .info-icon {
-            font-size: 2rem;
-            color: #dc2626;
-            min-width: 40px;
-        }
-
-        .info-content h3 {
-            font-size: 1.1rem;
-            font-weight: 400;
-            margin-bottom: 0.5rem;
+        .section-title {
+            font-family: 'Teko', sans-serif;
+            font-size: 4rem;
+            text-align: center;
             text-transform: uppercase;
-            letter-spacing: 0.1rem;
-        }
-
-        .info-content p {
-            color: #999;
-            line-height: 1.6;
-            font-size: 1rem;
-        }
-
-        .info-content a {
-            color: #e5e5e5;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .info-content a:hover {
-            color: #dc2626;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1.5rem;
-            margin-top: 3rem;
-            justify-content: center;
-        }
-
-        .social-link {
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
             color: white;
-            font-size: 1.5rem;
-            text-decoration: none;
-            transition: all 0.3s ease;
+            margin-bottom: 0.5rem;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 5rem;
+            font-size: 1.1rem;
         }
 
-        .social-link:hover {
-            background: #dc2626;
-            border-color: #dc2626;
+        /* TARJETA DE PRODUCTO */
+        .product-showcase {
+            display: flex;
+            flex-wrap: wrap;
+            background: var(--card-bg);
+            margin-bottom: 6rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            border: 1px solid #222;
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .product-showcase:hover {
+            box-shadow: 0 15px 60px rgba(220, 38, 38, 0.15);
+            border-color: #333;
             transform: translateY(-5px);
         }
 
-        footer {
-            background: #0a0a0a;
-            color: #999;
-            text-align: center;
-            padding: 2rem;
-            font-size: 0.9rem;
+        /* Lado de Imagen */
+        .product-image-container {
+            flex: 1 1 50%;
+            min-width: 300px;
+            height: 550px;
+            position: relative;
+            background: radial-gradient(circle at center, #2a2a2a 0%, #0d0d0d 100%);
+            overflow: hidden;
         }
 
-        @media (max-width: 968px) {
-            .product-showcase,
-            .product-showcase:nth-child(even) {
-                flex-direction: column;
-                gap: 2rem;
-            }
-
-            .product-image-container {
-                width: 100%;
-                height: 400px;
-            }
-
-            .product-carousel,
-            .product-showcase:nth-child(even) .product-carousel {
-                clip-path: polygon(0 0, 100% 0, 100% 90%, 0% 100%);
-            }
-
-            .product-name {
-                font-size: 2rem;
-            }
-            
-            .product-details {
-                padding: 1rem;
-            }
-
-            .about-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .business-types {
-                flex-direction: column;
-            }
-
-            .contact-wrapper {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-            }
-            
-            .contact-form-section {
-                padding: 2rem;
-            }
-            
-            .social-links {
-                margin-top: 2rem;
-            }
-            
-            .section {
-                padding: 5rem 1.5rem 4rem 1.5rem;
-            }
-            
-            .products-section {
-                padding-top: 7rem;
-            }
+        /* Lado de Texto */
+        .product-details {
+            flex: 1 1 50%;
+            min-width: 300px;
+            padding: 3rem 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-left: 1px solid #222;
         }
 
-        @media (max-width: 768px) {
-            .logo {
-                font-size: 2.5rem;
-            }
-            
-            .tagline {
-                font-size: 1rem;
-            }
-            
-            .section-title {
-                font-size: 2rem;
-            }
+        /* Invertir orden en pares (Zigzag) */
+        .product-showcase:nth-child(even) { flex-direction: row-reverse; }
+        .product-showcase:nth-child(even) .product-details { border-left: none; border-right: 1px solid #222; }
 
-            .product-showcase {
-                margin-bottom: 4rem;
-            }
-            
-            .section {
-                padding: 4rem 1rem 3rem 1rem;
-            }
-            
-            .products-section {
-                padding-top: 6rem;
-            }
-            
-            .product-image-container {
-                height: 350px;
-            }
-            
-            .product-name {
-                font-size: 1.8rem;
-            }
-            
-            .product-description {
-                font-size: 1rem;
-            }
-            
-            .section-subtitle {
-                font-size: 1rem;
-                margin-bottom: 3rem;
-            }
+        /* Estilos Internos de Producto */
+        .carousel-wrapper {
+            display: flex; height: 100%;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .carousel-slide {
+            min-width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .carousel-slide img {
+            max-width: 85%; max-height: 85%;
+            object-fit: contain;
+            filter: drop-shadow(0 15px 30px rgba(0,0,0,0.6));
+        }
 
-            .carousel-arrow {
-                width: 35px;
-                height: 35px;
-                font-size: 1rem;
-            }
+        .carousel-arrow {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(0,0,0,0.5); border: none; color: white;
+            padding: 1rem; cursor: pointer; z-index: 10; 
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+            font-size: 1.5rem;
+        }
+        .carousel-arrow:hover { 
+            background: var(--primary); 
+            transform: translateY(-50%) scale(1.1);
+        }
+        .carousel-arrow.prev { left: 0; }
+        .carousel-arrow.next { right: 0; }
+
+        .product-category {
+            color: var(--primary); font-weight: 700; letter-spacing: 2px;
+            text-transform: uppercase; font-size: 0.9rem; margin-bottom: 0.5rem;
+        }
+        .product-name {
+            font-family: 'Teko', sans-serif; font-size: 3.5rem; line-height: 1;
+            margin-bottom: 1.5rem; color: white;
+        }
+        .product-description {
+            color: #999; margin-bottom: 1.5rem; line-height: 1.6;
+        }
+        .product-features li {
+            margin-bottom: 0.5rem; color: #ccc; list-style: none;
+            position: relative; padding-left: 1.5rem;
+        }
+        .product-features li::before {
+            content: '>'; position: absolute; left: 0;
+            color: var(--primary); font-weight: bold;
+        }
+        .product-badge {
+            background: #222; color: white; padding: 0.5rem 1rem;
+            display: inline-block; font-size: 0.8rem; letter-spacing: 1px;
+            border-left: 3px solid var(--primary); margin-top: 2rem;
+            text-transform: uppercase; font-weight: bold;
+        }
+        .btn-consultar {
+            display: inline-block; margin-top: 1rem;
+            color: var(--primary); text-decoration: none; 
+            border-bottom: 2px solid var(--primary); padding-bottom: 2px;
+            font-weight: bold; font-family: 'Teko', sans-serif; letter-spacing: 1px; font-size: 1.2rem;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
         }
         
-        @media (max-width: 480px) {
-            .logo {
-                font-size: 2rem;
-            }
-            
-            .cta-button {
-                padding: 0.8rem 2rem;
-                font-size: 0.9rem;
-            }
+        .btn-consultar:hover {
+            color: white;
+            padding-left: 10px;
+            border-bottom-color: white;
+        }
+        
+        .btn-consultar::before {
+            content: '→';
+            position: absolute;
+            left: -20px;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .btn-consultar:hover::before {
+            left: -15px;
+            opacity: 1;
+        }
 
-            .product-showcase {
-                margin-bottom: 3rem;
-            }
+        /* --- SOBRE NOSOTROS (Oscuro) --- */
+        .about-section {
+            background: #0f0f0f;
+            border-top: 1px solid #222;
+            border-bottom: 1px solid #222;
+        }
+        .about-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+        }
+        .about-card h3 {
+            font-family: 'Teko', sans-serif; font-size: 2.5rem; color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        .about-card p {
+            color: #aaa; line-height: 1.7; margin-bottom: 1rem;
+        }
 
-            .product-image-container {
-                height: 300px;
-            }
-            
-            .form-title {
-                font-size: 1.5rem;
-            }
+        /* --- CONTACTO --- */
+        .contact { background: #050505; }
+        .contact-container { max-width: 600px; margin: 0 auto; text-align: center; }
+        
+        .form-group { margin-bottom: 1rem; text-align: left; }
+        .form-input, .form-textarea {
+            width: 100%; padding: 1rem; background: #111;
+            border: 1px solid #333; color: white; font-family: inherit;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .form-input:focus, .form-textarea:focus {
+            border-color: var(--primary); outline: none; background: #161616;
+            box-shadow: 0 0 15px rgba(220, 38, 38, 0.2);
+            transform: translateY(-2px);
+        }
+        .form-button {
+            width: 100%; padding: 1rem; background: var(--primary);
+            color: white; border: none; font-family: 'Teko', sans-serif;
+            font-size: 1.4rem; letter-spacing: 1px; cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+        .form-button::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        .form-button:hover::before {
+            left: 100%;
+        }
+        .form-button:hover { 
+            background: #b91c1c; 
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(220, 38, 38, 0.4);
+        }
 
-            .carousel-arrow {
-                width: 30px;
-                height: 30px;
-            }
+        .social-icons {
+            display: flex; justify-content: center; gap: 2rem; margin-top: 3rem;
+        }
+        .social-link {
+            display: flex; align-items: center; gap: 10px;
+            color: #fff; text-decoration: none; font-size: 1.2rem;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+            padding: 10px 20px; border: 1px solid #333;
+        }
+        .social-link:hover { 
+            border-color: var(--primary); 
+            color: var(--primary); 
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(220, 38, 38, 0.3);
+        }
 
-            .carousel-arrow.prev {
-                left: 10px;
-            }
+        /* Animations */
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); } 40% { transform: translateX(-50%) translateY(-10px); } 60% { transform: translateX(-50%) translateY(-5px); } }
 
-            .carousel-arrow.next {
-                right: 10px;
+        /* --- RESPONSIVE --- */
+        @media (max-width: 900px) {
+            .logo-text { font-size: 3.5rem; }
+            .product-showcase, .product-showcase:nth-child(even) {
+                flex-direction: column !important;
             }
+            .product-details { border: none; padding: 2rem; border-top: 1px solid #222; }
+            .product-image-container { height: 400px; }
+            .about-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
+
     <section class="hero">
+        <canvas id="bg-canvas"></canvas>
         <div class="hero-content">
-            <h1 class="logo">Kombat Wear</h1>
+            <div class="brand-logo">K</div>
+            <h1 class="logo-text">Kombat <span>Wear</span></h1>
             <p class="tagline">Forjamos la vestidura de los que no se rinden</p>
-            <a href="#productos" class="cta-button">Ver Productos</a>
+            <a href="#productos" class="cta-button">Ver Equipamiento</a>
         </div>
         <div class="scroll-indicator">↓</div>
     </section>
 
-    <section id="productos" class="section products-section">
+    <section id="productos" class="section">
         <div class="container">
-            <h2 class="section-title">Nuestros Productos</h2>
-            <p class="section-subtitle">Indumentaria diseñada para la excelencia en cada disciplina</p>
-            
-            <!-- Kimono -->
-            <div class="product-showcase">
+            <h2 class="section-title fade-in-section">ARSENAL</h2>
+            <p class="section-subtitle fade-in-section">Diseñado para la excelencia en cada disciplina</p>
+
+            <div class="product-showcase fade-in-section">
                 <div class="product-image-container">
-                    <div class="product-carousel">
-                        <div class="carousel-wrapper" data-product="kimono">
-                            <div class="carousel-slide">
-                                <img src="assets\kimono-frente.png" alt="Kimono Frente">
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="assets\kimono-lateral.png" alt="Kimono Lateral">
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="assets\kimono-atras.png" alt="Kimono Atrás">
-                            </div>
-                        </div>
-                        <button class="carousel-arrow prev" data-product="kimono">‹</button>
-                        <button class="carousel-arrow next" data-product="kimono">›</button>
-                        <div class="carousel-controls">
-                            <span class="carousel-dot active" data-product="kimono" data-slide="0"></span>
-                            <span class="carousel-dot" data-product="kimono" data-slide="1"></span>
-                            <span class="carousel-dot" data-product="kimono" data-slide="2"></span>
-                        </div>
+                    <div class="carousel-wrapper" id="carousel-kimono">
+                        <div class="carousel-slide"><img src="assets/kimono-frente.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=KIMONO+FRENTE'" alt="Kimono Frente"></div>
+                        <div class="carousel-slide"><img src="assets/kimono-lateral.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=KIMONO+LATERAL'" alt="Kimono Lateral"></div>
+                        <div class="carousel-slide"><img src="assets/kimono-atras.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=KIMONO+ATRAS'" alt="Kimono Atras"></div>
                     </div>
+                    <button class="carousel-arrow prev" onclick="moveSlide('kimono', -1)">❮</button>
+                    <button class="carousel-arrow next" onclick="moveSlide('kimono', 1)">❯</button>
                 </div>
                 <div class="product-details">
-                    <div class="product-category">Tradicional</div>
-                    <h3 class="product-name">Kimonos</h3>
-                    <p class="product-description">
-                        Kimonos de competición certificados para torneos nacionales e internacionales. Confeccionados con algodón 100% de alta densidad, cada pieza es sometida a rigurosos controles de calidad.
-                    </p>
+                    <div class="product-category">TRADICIONAL</div>
+                    <h3 class="product-name">KIMONO PRO</h3>
+                    <p class="product-description">Kimonos de competición certificados para torneos internacionales. Algodón Pearl Weave de alta densidad sometido a controles de estrés.</p>
                     <ul class="product-features">
-                        <li>Tela de algodón peinado de 450gsm</li>
+                        <li>Algodón peinado 450gsm</li>
                         <li>Costuras reforzadas en triple puntada</li>
-                        <li>Corte anatómico para máxima movilidad</li>
-                        <li>Pre-encogido y listo para competición</li>
-                        <li>Aptos para competiciones nacionales e internacionales</li>
+                        <li>Solapa vulcanizada anti-bacterias</li>
+                        <li>Pre-encogido listo para competir</li>
                     </ul>
                     <div class="product-badge">MAYORISTA & MINORISTA</div>
-                    <br>
-                    <a href="#contacto" class="product-cta">CONSULTAR</a>
+                    <a href="#contacto" class="btn-consultar">CONSULTAR PRECIO</a>
                 </div>
             </div>
-            <!-- Shorts MMA -->
-            <div class="product-showcase">
+
+            <div class="product-showcase fade-in-section">
                 <div class="product-image-container">
-                    <div class="product-carousel">
-                        <div class="carousel-wrapper" data-product="shorts_mma">
-                            <div class="carousel-slide">
-                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f0f0f0' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3EShort Frente%3C/text%3E%3C/svg%3E" alt="Short Frente">
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f0f0f0' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3EShort Lateral%3C/text%3E%3C/svg%3E" alt="Short Lateral">
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f0f0f0' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3EShort Atrás%3C/text%3E%3C/svg%3E" alt="Short Atrás">
-                            </div>
-                        </div>
-                        <button class="carousel-arrow prev" data-product="shorts_mma">‹</button>
-                        <button class="carousel-arrow next" data-product="shorts_mma">›</button>
-                        <div class="carousel-controls">
-                            <span class="carousel-dot active" data-product="shorts_mma" data-slide="0"></span>
-                            <span class="carousel-dot" data-product="shorts_mma" data-slide="1"></span>
-                            <span class="carousel-dot" data-product="shorts_mma" data-slide="2"></span>
-                        </div>
+                    <div class="carousel-wrapper" id="carousel-shorts">
+                        <div class="carousel-slide"><img src="assets/short-frente.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=SHORT+FRENTE'" alt="Short Frente"></div>
+                        <div class="carousel-slide"><img src="assets/short-lateral.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=SHORT+LATERAL'" alt="Short Lateral"></div>
                     </div>
+                    <button class="carousel-arrow prev" onclick="moveSlide('shorts', -1)">❮</button>
+                    <button class="carousel-arrow next" onclick="moveSlide('shorts', 1)">❯</button>
                 </div>
                 <div class="product-details">
-                    <div class="product-category">Combat</div>
-                    <h3 class="product-name">Fight Shorts</h3>
-                    <p class="product-description">
-                        Diseñados para resistir los agarres más fuertes y permitir patadas altas sin restricciones. Sistema de cierre de seguridad y tela ripstop antidesgarro.
-                    </p>
+                    <div class="product-category">COMBAT</div>
+                    <h3 class="product-name">FIGHT SHORTS</h3>
+                    <p class="product-description">Diseñados para resistir agarres fuertes y permitir patadas altas sin restricciones. Tela ripstop antidesgarro con sistema de cierre seguro.</p>
                     <ul class="product-features">
                         <li>Corte anatómico con aberturas laterales</li>
                         <li>Cierre con velcro y cordón interno</li>
-                        <li>Tela elástica en la entrepierna</li>
-                        <li>Costuras reforzadas de seguridad</li>
+                        <li>Tela elástica en entrepierna</li>
                         <li>Sublimado de alta definición</li>
                     </ul>
                     <div class="product-badge">MAYORISTA & MINORISTA</div>
-                    <br>
-                    <a href="#contacto" class="product-cta">CONSULTAR</a>
+                    <a href="#contacto" class="btn-consultar">CONSULTAR PRECIO</a>
                 </div>
             </div>
-            <!-- lycra -->
-            <div class="product-showcase">
-                <div class="product-image-container">
-                    <div class="product-carousel">
-                        <div class="carousel-wrapper" data-product="lycra">
-                            <div class="carousel-slide">
-                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f0f0f0' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3ELycra Frente%3C/text%3E%3C/svg%3E" alt="Lycra Frente">
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f0f0f0' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3ELycra Lateral%3C/text%3E%3C/svg%3E" alt="Lycra Lateral">
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f0f0f0' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3ELycra Atrás%3C/text%3E%3C/svg%3E" alt="Lycra Atrás">
-                            </div>
-                        </div>
-                        
-                        <button class="carousel-arrow prev" data-product="lycra">‹</button>
-                        <button class="carousel-arrow next" data-product="lycra">›</button>
-                        
-                        <div class="carousel-controls">
-                            <span class="carousel-dot active" data-product="lycra" data-slide="0"></span>
-                            <span class="carousel-dot" data-product="lycra" data-slide="1"></span>
-                            <span class="carousel-dot" data-product="lycra" data-slide="2"></span>
-                        </div>
-                    </div>
-                </div>
 
+            <div class="product-showcase fade-in-section">
+                <div class="product-image-container">
+                    <div class="carousel-wrapper" id="carousel-lycra">
+                        <div class="carousel-slide"><img src="assets/lycra-frente.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=LYCRA+FRENTE'" alt="Lycra Frente"></div>
+                        <div class="carousel-slide"><img src="assets/lycra-atras.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=LYCRA+ATRAS'" alt="Lycra Atras"></div>
+                    </div>
+                    <button class="carousel-arrow prev" onclick="moveSlide('lycra', -1)">❮</button>
+                    <button class="carousel-arrow next" onclick="moveSlide('lycra', 1)">❯</button>
+                </div>
                 <div class="product-details">
-                    <div class="product-category">Performance</div>
-                    <h3 class="product-name">Lycras</h3>
-                    <p class="product-description">
-                        Rashguards de compresión con tecnología antimicrobiana. Ideales para grappling, MMA y entrenamiento de alta intensidad. Protegen la piel contra quemaduras por roce y mantienen la temperatura muscular.
-                    </p>
+                    <div class="product-category">PERFORMANCE</div>
+                    <h3 class="product-name">RASHGUARDS</h3>
+                    <p class="product-description">Compresión con tecnología antimicrobiana. Ideales para No-Gi y MMA, protegen la piel contra quemaduras por roce y mantienen la temperatura.</p>
                     <ul class="product-features">
                         <li>Tejido de compresión 4-way stretch</li>
-                        <li>Tecnología antimicrobiana y anti-olor</li>
                         <li>Costuras planas (Flatlock) reforzadas</li>
                         <li>Banda de silicona en cintura antideslizante</li>
-                        <li>Sublimado de alta definición (no se borra)</li>
+                        <li>Tecnología anti-olor</li>
                     </ul>
-                    
                     <div class="product-badge">MAYORISTA & MINORISTA</div>
-                    <br>
-                    <a href="#contacto" class="product-cta">CONSULTAR</a>
+                    <a href="#contacto" class="btn-consultar">CONSULTAR PRECIO</a>
                 </div>
             </div>
 
-            <!-- Cinturones -->
-            <div class="product-showcase">
+            <div class="product-showcase fade-in-section">
                 <div class="product-image-container">
-                    <div class="product-carousel">
-                        <div class="carousel-wrapper" data-product="cinturones">
-                            <div class="carousel-slide">
-                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f0f0f0' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3ECinturón Blanco%3C/text%3E%3C/svg%3E" alt="Cinturón">
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f0f0f0' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3ECinturón Azul%3C/text%3E%3C/svg%3E" alt="Cinturón">
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f0f0f0' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3ECinturón Negro%3C/text%3E%3C/svg%3E" alt="Cinturón">
-                            </div>
-                        </div>
-                        <button class="carousel-arrow prev" data-product="cinturones">‹</button>
-                        <button class="carousel-arrow next" data-product="cinturones">›</button>
-                        <div class="carousel-controls">
-                            <span class="carousel-dot active" data-product="cinturones" data-slide="0"></span>
-                            <span class="carousel-dot" data-product="cinturones" data-slide="1"></span>
-                            <span class="carousel-dot" data-product="cinturones" data-slide="2"></span>
-                        </div>
+                    <div class="carousel-wrapper" id="carousel-cinto">
+                        <div class="carousel-slide"><img src="assets/cinturones.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=CINTURONES'" alt="Cinturones"></div>
+                        <div class="carousel-slide"><img src="assets/cinturones-detalle.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=DETALLE+CINTURONES'" alt="Cinturones Detalle"></div>
                     </div>
+                    <button class="carousel-arrow prev" onclick="moveSlide('cinto', -1)">❮</button>
+                    <button class="carousel-arrow next" onclick="moveSlide('cinto', 1)">❯</button>
                 </div>
                 <div class="product-details">
-                    <div class="product-category">Graduación</div>
-                    <h3 class="product-name">Cinturones</h3>
-                    <p class="product-description">
-                        Cinturones de graduación en todos los colores. Fabricados con algodón resistente y costuras reforzadas que garantizan durabilidad a lo largo de tu camino en las artes marciales.
-                    </p>
+                    <div class="product-category">GRADUACIÓN</div>
+                    <h3 class="product-name">CINTURONES</h3>
+                    <p class="product-description">Cinturones fabricados con algodón resistente y costuras reforzadas que garantizan durabilidad a lo largo de tu camino.</p>
                     <ul class="product-features">
-                        <li>Algodón 100% de alta densidad</li>
-                        <li>Todos los colores de graduación disponibles</li>
-                        <li>Costuras reforzadas en los extremos</li>
-                        <li>Largo y ancho según estándar internacional</li>
+                        <li>Algodón 100% alta densidad</li>
+                        <li>Todos los colores reglamentarios</li>
+                        <li>Largo y ancho estándar IBJJF</li>
                         <li>Opción de bordado personalizado</li>
                     </ul>
                     <div class="product-badge">MAYORISTA & MINORISTA</div>
-                    <br>
-                    <a href="#contacto" class="product-cta">CONSULTAR</a>
+                    <a href="#contacto" class="btn-consultar">CONSULTAR PRECIO</a>
                 </div>
             </div>
 
-            <!-- Dry Fit -->
-            <div class="product-showcase">
+            <div class="product-showcase fade-in-section">
                 <div class="product-image-container">
-                    <div class="product-carousel">
-                        <div class="carousel-wrapper" data-product="dryfit">
-                            <div class="carousel-slide">
-                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f0f0f0' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3EDry Fit Frente%3C/text%3E%3C/svg%3E" alt="Dry Fit Frente">
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f0f0f0' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3EDry Fit Lateral%3C/text%3E%3C/svg%3E" alt="Dry Fit Lateral">
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f0f0f0' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3EDry Fit Atrás%3C/text%3E%3C/svg%3E" alt="Dry Fit Atrás">
-                            </div>
-                        </div>
-                        <button class="carousel-arrow prev" data-product="dryfit">‹</button>
-                        <button class="carousel-arrow next" data-product="dryfit">›</button>
-                        <div class="carousel-controls">
-                            <span class="carousel-dot active" data-product="dryfit" data-slide="0"></span>
-                            <span class="carousel-dot" data-product="dryfit" data-slide="1"></span>
-                            <span class="carousel-dot" data-product="dryfit" data-slide="2"></span>
-                        </div>
+                    <div class="carousel-wrapper" id="carousel-remeras">
+                        <div class="carousel-slide"><img src="assets/remera-dry.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=DRY+FIT'" alt="Remeras Dry Fit"></div>
+                        <div class="carousel-slide"><img src="assets/remera-dry-atras.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=DRY+FIT+ATRAS'" alt="Remeras Dry Fit Atrás"></div>
                     </div>
+                    <button class="carousel-arrow prev" onclick="moveSlide('remeras', -1)">❮</button>
+                    <button class="carousel-arrow next" onclick="moveSlide('remeras', 1)">❯</button>
                 </div>
                 <div class="product-details">
-                    <div class="product-category">Training</div>
-                    <h3 class="product-name">Remeras Dry Fit</h3>
-                    <p class="product-description">
-                        Remeras técnicas con tecnología de secado rápido. Perfectas para entrenamientos intensos y uso diario, ofrecen máximo confort y transpirabilidad en cualquier condición.
-                    </p>
+                    <div class="product-category">LIFESTYLE & TRAINING</div>
+                    <h3 class="product-name">APPAREL DRY FIT</h3>
+                    <p class="product-description">Remeras Dry Fit de secado rápido para entrenamiento intenso. Control de humedad avanzado y estampados de alta durabilidad.</p>
                     <ul class="product-features">
-                        <li>Tecnología de secado ultrarrápido</li>
-                        <li>Tejido liviano y transpirable</li>
-                        <li>Control de humedad avanzado</li>
-                        <li>Corte ergonómico moderno</li>
-                        <li>Ideal para entrenamiento y uso casual</li>
-                    </ul>
-                    <div class="product-badge" style="background: #1a1a1a; color: white;">SOLO MINORISTA</div>
-                    <br>
-                    <a href="#contacto" class="product-cta">CONSULTAR</a>
-                </div>
-            </div>
-
-            <!-- Remeras Algodón -->
-            <div class="product-showcase">
-                <div class="product-image-container">
-                    <div class="product-carousel">
-                        <div class="carousel-wrapper" data-product="algodon">
-                            <div class="carousel-slide">
-                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f0f0f0' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3ERemera Frente%3C/text%3E%3C/svg%3E" alt="Remera Frente">
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f0f0f0' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3ERemera Lateral%3C/text%3E%3C/svg%3E" alt="Remera Lateral">
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='500'%3E%3Crect fill='%23f0f0f0' width='400' height='500'/%3E%3Ctext x='50%25' y='50%25' font-size='18' text-anchor='middle' dy='.3em' fill='%23999'%3ERemera Atrás%3C/text%3E%3C/svg%3E" alt="Remera Atrás">
-                            </div>
-                        </div>
-                        <button class="carousel-arrow prev" data-product="algodon">‹</button>
-                        <button class="carousel-arrow next" data-product="algodon">›</button>
-                        <div class="carousel-controls">
-                            <span class="carousel-dot active" data-product="algodon" data-slide="0"></span>
-                            <span class="carousel-dot" data-product="algodon" data-slide="1"></span>
-                            <span class="carousel-dot" data-product="algodon" data-slide="2"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-details">
-                    <div class="product-category">Lifestyle</div>
-                    <h3 class="product-name">Remeras Algodón</h3>
-                    <p class="product-description">
-                        Remeras 100% algodón de alta calidad. Ideales para uso casual y representación de tu academia o equipo. Comodidad clásica con estilo deportivo.
-                    </p>
-                    <ul class="product-features">
-                        <li>Algodón 100% peinado premium</li>
-                        <li>Cuello reforzado que no se deforma</li>
-                        <li>Tacto suave y confortable</li>
+                        <li>Dry Fit: Control de humedad avanzado</li>
+                        <li>Secado ultra rápido</li>
                         <li>Estampados de alta durabilidad</li>
-                        <li>Cortes clásicos y modernos</li>
+                        <li>Cortes modernos y ergonómicos</li>
                     </ul>
-                    <div class="product-badge" style="background: #1a1a1a; color: white;">SOLO MINORISTA</div>
-                    <br>
-                    <a href="#contacto" class="product-cta">CONSULTAR</a>
+                    <div class="product-badge" style="background:#333; border-color:#999;">SOLO MINORISTA</div>
+                    <a href="#contacto" class="btn-consultar">CONSULTAR PRECIO</a>
+                </div>
+            </div>
+
+            <div class="product-showcase fade-in-section">
+                <div class="product-image-container">
+                    <div class="carousel-wrapper" id="carousel-algodon">
+                        <div class="carousel-slide"><img src="assets/remera-algodon-frente.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=ALGODON+FRENTE'" alt="Remera Algodón Frente"></div>
+                        <div class="carousel-slide"><img src="assets/remera-algodon-atras.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=ALGODON+ATRAS'" alt="Remera Algodón Atrás"></div>
+                        <div class="carousel-slide"><img src="assets/remera-algodon-detalle.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=ALGODON+DETALLE'" alt="Remera Algodón Detalle"></div>
+                    </div>
+                    <button class="carousel-arrow prev" onclick="moveSlide('algodon', -1)">❮</button>
+                    <button class="carousel-arrow next" onclick="moveSlide('algodon', 1)">❯</button>
+                </div>
+                <div class="product-details">
+                    <div class="product-category">LIFESTYLE</div>
+                    <h3 class="product-name">REMERAS ALGODÓN PREMIUM</h3>
+                    <p class="product-description">Remeras de algodón 100% peinado premium para vestir a tu equipo fuera del tatami. Suavidad excepcional y durabilidad garantizada.</p>
+                    <ul class="product-features">
+                        <li>Algodón 100% Peinado Premium</li>
+                        <li>Textura suave y confortable</li>
+                        <li>Estampados de alta definición</li>
+                        <li>Diseños exclusivos para tu academia</li>
+                    </ul>
+                    <div class="product-badge" style="background:#333; border-color:#999;">SOLO MINORISTA</div>
+                    <a href="#contacto" class="btn-consultar">CONSULTAR PRECIO</a>
                 </div>
             </div>
 
         </div>
     </section>
 
-    <section id="nosotros" class="section about">
+    <section class="section about-section">
         <div class="container">
-            <h2 class="section-title">Sobre Nosotros</h2>
-            <p class="section-subtitle">Fabricantes de excelencia en indumentaria para artes marciales</p>
-            
-            <div class="about-content">
-                <div class="about-text">
-                    <h3>Somos Fabricantes</h3>
-                    <p>
-                        En Kombat Wear no somos intermediarios. Diseñamos, desarrollamos y fabricamos cada prenda con los más altos estándares de calidad. Nuestro control directo del proceso de producción nos permite garantizar la excelencia en cada detalle.
-                    </p>
-                    <p>
-                        Con años de experiencia en el mercado de indumentaria deportiva para artes marciales, hemos perfeccionado nuestras técnicas y materiales para ofrecer productos que superan las expectativas de atletas y competidores.
-                    </p>
-                    
-                    <div class="business-types">
-                        <div class="business-badge">MAYORISTA</div>
-                        <div class="business-badge">MINORISTA</div>
-                    </div>
+            <h2 class="section-title fade-in-section">SOBRE NOSOTROS</h2>
+            <div class="about-grid fade-in-section">
+                <div class="about-card">
+                    <h3>SOMOS FABRICANTES</h3>
+                    <p>En Kombat Wear no somos intermediarios. Diseñamos, desarrollamos y fabricamos cada prenda con los más altos estándares de calidad. Nuestro control directo del proceso de producción nos permite garantizar la excelencia en cada detalle, desde el tejido hasta el empaquetado final.</p>
                 </div>
-                
-                <div class="about-text">
-                    <h3>Nuestro Compromiso</h3>
-                    <p>
-                        Trabajamos con las mejores materias primas y aplicamos rigurosos controles de calidad en cada etapa del proceso. Desde la selección de telas hasta las costuras finales, cada kimono, lycra o short pasa por múltiples inspecciones.
-                    </p>
-                    <p>
-                        Nos especializamos en atender tanto a distribuidores mayoristas como a clientes individuales, ofreciendo la misma calidad premium en cada pedido, sin importar su tamaño.
-                    </p>
+                <div class="about-card">
+                    <h3>NUESTRO COMPROMISO</h3>
+                    <p>Trabajamos con las mejores materias primas del mercado. Cada kimono, rashguard o short pasa por rigurosas pruebas de tracción y resistencia. Nos especializamos en atender tanto a academias y distribuidores mayoristas como a competidores individuales que buscan equipamiento de élite.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <section id="contacto" class="section contact">
-        <div class="container">
-            <h2 class="section-title">Contactanos</h2>
-            <p class="section-subtitle">Estamos listos para equipar tu camino en las artes marciales</p>
+        <div class="contact-container">
+            <h2 class="section-title fade-in-section">CONTACTO</h2>
+            <p class="section-subtitle fade-in-section">Equipa a tu academia o consigue tu armadura</p>
             
-            <div class="contact-wrapper">
-                <div class="contact-form-section">
-                    <h3 class="form-title">Envíanos un Mensaje</h3>
-                    <p class="form-subtitle">Te responderemos en menos de 24 horas</p>
-                    
-                    <form id="contactForm">
-                        <div class="form-group">
-                            <label class="form-label">Nombre Completo</label>
-                            <input type="text" class="form-input" placeholder="Tu nombre" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-input" placeholder="tu@email.com" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Teléfono</label>
-                            <input type="tel" class="form-input" placeholder="+54 11 1234-5678">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Mensaje</label>
-                            <textarea class="form-textarea" placeholder="Contanos qué necesitás..." required></textarea>
-                        </div>
-                        
-                        <button type="submit" class="form-button">Enviar Mensaje</button>
-                    </form>
+            <form id="contactForm" class="fade-in-section">
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="Nombre / Academia" required>
                 </div>
-                
-                <div class="contact-info-section">
-                    <div class="info-block">
-                        <div class="info-icon">📱</div>
-                        <div class="info-content">
-                            <h3>WhatsApp</h3>
-                            <p>Chateá directo con nosotros<br>
-                            <a href="https://wa.me/5491123456789">+54 9 11 2345-6789</a></p>
-                        </div>
-                    </div>
-                    
-                    <div class="info-block">
-                        <div class="info-icon">📧</div>
-                        <div class="info-content">
-                            <h3>Email</h3>
-                            <p>Para consultas y cotizaciones<br>
-                            <a href="mailto:contacto@kombatwear.com">contacto@kombatwear.com</a></p>
-                        </div>
-                    </div>
-                    
-                    <div class="info-block">
-                        <div class="info-icon">🏢</div>
-                        <div class="info-content">
-                            <h3>Showroom</h3>
-                            <p>Proximamente!<br>
-                            Buenos Aires, Argentina<br>
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div class="social-links">
-                        <a href="https://www.instagram.com/kombatwearfc/" class="social-link" title="Instagram">📷</a>
-                        <a href="#" class="social-link" title="Facebook">👍</a>
-                        <a href="#" class="social-link" title="TikTok">🎵</a>
-                    </div>
+                <div class="form-group">
+                    <input type="email" class="form-input" placeholder="Email de contacto" required>
                 </div>
+                <div class="form-group">
+                    <textarea class="form-textarea" placeholder="Escribe tu consulta aquí..." style="height: 120px;" required></textarea>
+                </div>
+                <button type="submit" class="form-button">ENVIAR MENSAJE</button>
+            </form>
+            
+            <div class="social-icons fade-in-section">
+                <a href="https://wa.me/5491100000000" class="social-link" target="_blank">
+                    <span>WhatsApp</span> 
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.696c1.029.575 1.956.883 3.023.883 3.181 0 5.769-2.587 5.769-5.766.001-3.181-2.585-5.766-5.986-5.766zm8.651 11.233c-.006-.017-3.131-4.996-3.805-6.075-.436-.698-1.077-1.129-1.896-1.129-1.928 0-3.321 1.636-3.321 2.946 0 .544.15 1.078.411 1.554l-1.63 4.29-4.316-1.649c-.482-.266-1.016-.417-1.561-.417-1.309 0-2.945 1.393-2.945 3.321 0 .82.43 1.46 1.127 1.895 1.08.675 6.059 3.8 6.076 3.806.028.01.27.072.502.072 1.393 0 2.525-1.131 2.525-2.523 0-.231-.063-.473-.073-.501l-1.093-4.591zm4.318-5.405c0-6.627-5.373-12-12-12s-12 5.373-12 12 12 12 12 12 12-5.373 12-12zm-22 0c0-5.514 4.486-10 10-10s10 4.486 10 10-4.486 10-10 10-10-4.486-10-10z"/></svg>
+                </a>
+                <a href="https://instagram.com/kombatwearfc" class="social-link" target="_blank">
+                    <span>Instagram</span>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </a>
             </div>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2024 Kombat Wear. Forjamos la vestidura de los que no se rinden.</p>
+        <div style="text-align: center; padding: 2rem; color: #444; font-size: 0.8rem; border-top: 1px solid #111;">
+            &copy; 2025 KOMBAT WEAR. TODOS LOS DERECHOS RESERVADOS.
+        </div>
     </footer>
 
-    <script>
-        // Sistema de carruseles independientes para cada producto
-        const carousels = {};
+    <script type="module">
+        import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+
+        const canvas = document.querySelector('#bg-canvas');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x000000, 0.002);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 100;
+
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+
+        const geometry = new THREE.BufferGeometry();
+        const particlesCount = 2000;
+        const posArray = new Float32Array(particlesCount * 3);
         
-        // Inicializar cada carrusel
-        document.querySelectorAll('[data-product]').forEach(elem => {
-            const productName = elem.getAttribute('data-product');
-            
-            if (!carousels[productName]) {
-                carousels[productName] = {
-                    currentSlide: 0,
-                    totalSlides: 3,
-                    autoInterval: null
-                };
-            }
-        });
-
-        function goToSlide(productName, index) {
-            const carousel = carousels[productName];
-            carousel.currentSlide = index;
-            
-            const wrapper = document.querySelector(`.carousel-wrapper[data-product="${productName}"]`);
-            wrapper.style.transform = `translateX(-${carousel.currentSlide * 100}%)`;
-            
-            const dots = document.querySelectorAll(`.carousel-dot[data-product="${productName}"]`);
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === carousel.currentSlide);
-            });
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 2000; 
         }
 
-        function nextSlide(productName) {
-            const carousel = carousels[productName];
-            carousel.currentSlide = (carousel.currentSlide + 1) % carousel.totalSlides;
-            goToSlide(productName, carousel.currentSlide);
+        geometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+        const material = new THREE.PointsMaterial({
+            size: 3, color: 0xdc2626, transparent: true, opacity: 0.8,
+            blending: THREE.AdditiveBlending
+        });
+
+        const particlesMesh = new THREE.Points(geometry, material);
+        scene.add(particlesMesh);
+
+        let mouseX = 0; let mouseY = 0;
+        document.addEventListener('mousemove', (event) => {
+            mouseX = event.clientX - window.innerWidth / 2;
+            mouseY = event.clientY - window.innerHeight / 2;
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            particlesMesh.rotation.x += 0.0005;
+            particlesMesh.rotation.y += 0.0005;
+            camera.position.x += (mouseX * 0.05 - camera.position.x) * 0.05;
+            camera.position.y += (-mouseY * 0.05 - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+            renderer.render(scene, camera);
         }
+        animate();
 
-        function prevSlide(productName) {
-            const carousel = carousels[productName];
-            carousel.currentSlide = (carousel.currentSlide - 1 + carousel.totalSlides) % carousel.totalSlides;
-            goToSlide(productName, carousel.currentSlide);
-        }
-
-        function startAutoSlide(productName) {
-            const carousel = carousels[productName];
-            stopAutoSlide(productName);
-            carousel.autoInterval = setInterval(() => nextSlide(productName), 4000);
-        }
-
-        function stopAutoSlide(productName) {
-            const carousel = carousels[productName];
-            if (carousel.autoInterval) {
-                clearInterval(carousel.autoInterval);
-                carousel.autoInterval = null;
-            }
-        }
-
-        // Event listeners para dots
-        document.querySelectorAll('.carousel-dot').forEach(dot => {
-            dot.addEventListener('click', () => {
-                const productName = dot.getAttribute('data-product');
-                const slideIndex = parseInt(dot.getAttribute('data-slide'));
-                stopAutoSlide(productName);
-                goToSlide(productName, slideIndex);
-                startAutoSlide(productName);
-            });
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
         });
+    </script>
 
-        // Event listeners para flechas
-        document.querySelectorAll('.carousel-arrow.prev').forEach(arrow => {
-            arrow.addEventListener('click', () => {
-                const productName = arrow.getAttribute('data-product');
-                stopAutoSlide(productName);
-                prevSlide(productName);
-                startAutoSlide(productName);
-            });
-        });
-
-        document.querySelectorAll('.carousel-arrow.next').forEach(arrow => {
-            arrow.addEventListener('click', () => {
-                const productName = arrow.getAttribute('data-product');
-                stopAutoSlide(productName);
-                nextSlide(productName);
-                startAutoSlide(productName);
-            });
-        });
-
-        // Pausar en hover para cada carrusel
-        document.querySelectorAll('.product-carousel').forEach(carousel => {
-            const wrapper = carousel.querySelector('.carousel-wrapper');
-            const productName = wrapper.getAttribute('data-product');
-            
-            carousel.addEventListener('mouseenter', () => stopAutoSlide(productName));
-            carousel.addEventListener('mouseleave', () => startAutoSlide(productName));
-        });
-
-        // Iniciar todos los carruseles
-        Object.keys(carousels).forEach(productName => {
-            startAutoSlide(productName);
-        });
-
-        // Intersection Observer para animaciones
-        const observerOptions = {
-            threshold: 0.15,
-            rootMargin: '0px 0px -50px 0px'
+    <script>
+        const carousels = {
+            'kimono': 0,
+            'shorts': 0,
+            'lycra': 0,
+            'cinto': 0,
+            'remeras': 0,
+            'algodon': 0
         };
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
+        function moveSlide(id, direction) {
+            const wrapper = document.getElementById(`carousel-${id}`);
+            if(!wrapper) return;
+            
+            const slides = wrapper.children.length;
+            if(slides <= 1) return;
 
-        document.querySelectorAll('.product-showcase').forEach(el => {
-            observer.observe(el);
-        });
+            carousels[id] += direction;
 
-        // Formulario
+            if (carousels[id] >= slides) carousels[id] = 0;
+            if (carousels[id] < 0) carousels[id] = slides - 1;
+
+            wrapper.style.transform = `translateX(-${carousels[id] * 100}%)`;
+        }
+
+        // Formulario Feedback Visual
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            const button = this.querySelector('.form-button');
-            const originalText = button.textContent;
-            
-            button.textContent = 'ENVIANDO...';
-            button.disabled = true;
+            const btn = this.querySelector('button');
+            const originalText = btn.textContent;
+            btn.textContent = 'ENVIANDO...';
+            btn.style.opacity = '0.7';
             
             setTimeout(() => {
-                button.textContent = '✓ MENSAJE ENVIADO';
-                button.style.background = '#16a34a';
-                
+                btn.textContent = 'MENSAJE ENVIADO ✓';
+                btn.style.background = '#16a34a';
                 setTimeout(() => {
-                    button.textContent = originalText;
-                    button.style.background = '#dc2626';
-                    button.disabled = false;
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                    btn.style.opacity = '1';
                     this.reset();
                 }, 3000);
             }, 1500);
         });
 
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    const y = target.getBoundingClientRect().top + window.pageYOffset;
-                    window.scrollTo({ top: y, behavior: 'smooth' });
+        // Intersection Observer para animaciones al hacer scroll
+        const fadeElements = document.querySelectorAll('.fade-in-section');
+        
+        const fadeInObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
                 }
             });
+        }, {
+            threshold: 0.15,
+            rootMargin: '0px 0px -50px 0px'
         });
 
-        // Parallax en hero
-        let ticking = false;
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
-                    const scrolled = window.pageYOffset;
-                    const hero = document.querySelector('.hero');
-                    if (hero && scrolled < window.innerHeight) {
-                        hero.style.transform = `translateY(${scrolled * 0.5}px)`;
-                    }
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        });
+        fadeElements.forEach(el => fadeInObserver.observe(el));
     </script>
 </body>
 </html>
-
