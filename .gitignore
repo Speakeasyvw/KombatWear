@@ -1,0 +1,8 @@
+# Material fuente y referencias locales; la web usa únicamente /assets.
+Assets Crudos/
+imagenes/
+kombatwear.txt
+
+# Archivos locales del sistema/editor.
+.DS_Store
+Thumbs.db
