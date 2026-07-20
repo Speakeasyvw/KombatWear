@@ -223,11 +223,148 @@
         .carousel-slide {
             min-width: 100%; height: 100%;
             display: flex; align-items: center; justify-content: center;
+            position: relative;
         }
         .carousel-slide img {
             max-width: 85%; max-height: 85%;
             object-fit: contain;
             filter: drop-shadow(0 15px 30px rgba(0,0,0,0.6));
+            cursor: zoom-in;
+        }
+
+        .image-lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 4.5rem 1.5rem 2rem;
+            background: rgba(0, 0, 0, 0.94);
+            backdrop-filter: blur(12px);
+        }
+        .image-lightbox.open { display: flex; }
+        .image-lightbox img {
+            width: auto;
+            height: auto;
+            max-width: min(94vw, 1500px);
+            max-height: 88vh;
+            object-fit: contain;
+            filter: drop-shadow(0 24px 60px rgba(0,0,0,0.8));
+            cursor: zoom-in;
+            touch-action: none;
+            user-select: none;
+            transition: transform 0.18s ease;
+        }
+        .image-lightbox img.zoomed {
+            cursor: grab;
+            transition: none;
+        }
+        .image-lightbox img.dragging { cursor: grabbing; }
+        .zoom-trigger {
+            position: absolute;
+            right: 1.2rem;
+            bottom: 4.9rem;
+            z-index: 11;
+            width: 42px;
+            height: 42px;
+            border: 1px solid #555;
+            border-radius: 50%;
+            background: rgba(10,10,10,0.88);
+            color: white;
+            font-size: 1.15rem;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .zoom-trigger:hover {
+            background: var(--primary);
+            transform: scale(1.08);
+        }
+        .lightbox-controls {
+            position: fixed;
+            left: 50%;
+            bottom: 1rem;
+            z-index: 1002;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            transform: translateX(-50%);
+            padding: 0.4rem;
+            border: 1px solid #444;
+            border-radius: 999px;
+            background: rgba(12,12,12,0.92);
+        }
+        .lightbox-controls button {
+            min-width: 42px;
+            height: 38px;
+            border: 0;
+            border-radius: 999px;
+            background: #242424;
+            color: white;
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+        .lightbox-controls button:hover { background: var(--primary); }
+        .lightbox-controls .zoom-reset {
+            padding: 0 0.85rem;
+            font-family: 'Teko', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 1px;
+        }
+        .lightbox-close {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            width: 46px;
+            height: 46px;
+            border: 1px solid #555;
+            border-radius: 50%;
+            background: rgba(15,15,15,0.9);
+            color: white;
+            font-size: 1.8rem;
+            line-height: 1;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .lightbox-close:hover {
+            background: var(--primary);
+            transform: scale(1.08);
+        }
+        .variant-selector {
+            position: absolute;
+            left: 50%;
+            bottom: 18px;
+            transform: translateX(-50%);
+            z-index: 12;
+            display: flex;
+            gap: 0.72rem;
+            padding: 0.6rem 0.75rem;
+            border: 1px solid #2d2d2d;
+            border-radius: 999px;
+            background: rgba(8, 8, 8, 0.9);
+            backdrop-filter: blur(8px);
+        }
+        .variant-button {
+            width: 30px;
+            height: 30px;
+            min-width: 30px;
+            padding: 0;
+            border: 2px solid #777;
+            border-radius: 50%;
+            background: linear-gradient(90deg, var(--swatch-a) 0 50%, var(--swatch-b) 50% 100%);
+            font-size: 0;
+            cursor: pointer;
+            box-shadow: 0 0 0 2px #090909;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .variant-button:hover,
+        .variant-button.active {
+            border-color: white;
+            box-shadow: 0 0 0 3px var(--primary);
+            transform: scale(1.12);
+        }
+        .variant-selector.compact .variant-button {
+            min-width: 30px;
         }
 
         .carousel-arrow {
@@ -408,12 +545,18 @@
             <div class="product-showcase fade-in-section">
                 <div class="product-image-container">
                     <div class="carousel-wrapper" id="carousel-kimono">
-                        <div class="carousel-slide"><img src="assets/kimono-frente.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=KIMONO+FRENTE'" alt="Kimono Frente"></div>
-                        <div class="carousel-slide"><img src="assets/kimono-lateral.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=KIMONO+LATERAL'" alt="Kimono Lateral"></div>
-                        <div class="carousel-slide"><img src="assets/kimono-atras.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=KIMONO+ATRAS'" alt="Kimono Atras"></div>
+                        <div class="carousel-slide"><img src="assets/kimono-blanco-set.png" alt="Kimono blanco completo con pantalón"></div>
+                        <div class="carousel-slide"><img src="assets/kimono-frente.png" alt="Kimono blanco de frente"></div>
+                        <div class="carousel-slide"><img src="assets/kimono-lateral.png" alt="Kimono blanco de costado"></div>
+                        <div class="carousel-slide"><img src="assets/kimono-atras.png" alt="Kimono blanco de atrás"></div>
                     </div>
                     <button class="carousel-arrow prev" onclick="moveSlide('kimono', -1)">❮</button>
                     <button class="carousel-arrow next" onclick="moveSlide('kimono', 1)">❯</button>
+                    <div class="variant-selector" aria-label="Color del kimono">
+                        <button class="variant-button active" style="--swatch-a:#f2f2ef;--swatch-b:#1b1b1b" type="button" data-kimono-variant="blanco" aria-label="Kimono blanco y negro" title="Blanco" aria-pressed="true"></button>
+                        <button class="variant-button" style="--swatch-a:#123d8d;--swatch-b:#10131a" type="button" data-kimono-variant="azul" aria-label="Kimono azul y negro" title="Azul" aria-pressed="false"></button>
+                        <button class="variant-button" style="--swatch-a:#111;--swatch-b:#686868" type="button" data-kimono-variant="negro" aria-label="Kimono negro y gris" title="Negro" aria-pressed="false"></button>
+                    </div>
                 </div>
                 <div class="product-details">
                     <div class="product-category">TRADICIONAL</div>
@@ -433,11 +576,17 @@
             <div class="product-showcase fade-in-section">
                 <div class="product-image-container">
                     <div class="carousel-wrapper" id="carousel-shorts">
-                        <div class="carousel-slide"><img src="assets/short-frente.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=SHORT+FRENTE'" alt="Short Frente"></div>
-                        <div class="carousel-slide"><img src="assets/short-lateral.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=SHORT+LATERAL'" alt="Short Lateral"></div>
+                        <div class="carousel-slide"><img src="assets/short-1-lateral.png" alt="Fight short de costado"></div>
+                        <div class="carousel-slide"><img src="assets/short-1-atras.png" alt="Fight short de atrás"></div>
                     </div>
                     <button class="carousel-arrow prev" onclick="moveSlide('shorts', -1)">❮</button>
                     <button class="carousel-arrow next" onclick="moveSlide('shorts', 1)">❯</button>
+                    <div class="variant-selector compact" aria-label="Diseño del short">
+                        <button class="variant-button active" style="--swatch-a:#111;--swatch-b:#f3f3f3" type="button" data-short-variant="1" aria-label="Short diseño 1, negro y blanco" title="Diseño 1" aria-pressed="true"></button>
+                        <button class="variant-button" style="--swatch-a:#f3f3f3;--swatch-b:#111" type="button" data-short-variant="2" aria-label="Short diseño 2, blanco y negro" title="Diseño 2" aria-pressed="false"></button>
+                        <button class="variant-button" style="--swatch-a:#111;--swatch-b:#666" type="button" data-short-variant="3" aria-label="Short diseño 3, negro y gris" title="Diseño 3" aria-pressed="false"></button>
+                        <button class="variant-button" style="--swatch-a:#08753f;--swatch-b:#f2c312" type="button" data-short-variant="4" aria-label="Short diseño 4, verde y amarillo" title="Diseño 4" aria-pressed="false"></button>
+                    </div>
                 </div>
                 <div class="product-details">
                     <div class="product-category">COMBAT</div>
@@ -448,30 +597,6 @@
                         <li>Cierre con velcro y cordón interno</li>
                         <li>Tela elástica en entrepierna</li>
                         <li>Sublimado de alta definición</li>
-                    </ul>
-                    <div class="product-badge">MAYORISTA & MINORISTA</div>
-                    <a href="#contacto" class="btn-consultar">CONSULTAR PRECIO</a>
-                </div>
-            </div>
-
-            <div class="product-showcase fade-in-section">
-                <div class="product-image-container">
-                    <div class="carousel-wrapper" id="carousel-lycra">
-                        <div class="carousel-slide"><img src="assets/lycra-frente.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=LYCRA+FRENTE'" alt="Lycra Frente"></div>
-                        <div class="carousel-slide"><img src="assets/lycra-atras.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=LYCRA+ATRAS'" alt="Lycra Atras"></div>
-                    </div>
-                    <button class="carousel-arrow prev" onclick="moveSlide('lycra', -1)">❮</button>
-                    <button class="carousel-arrow next" onclick="moveSlide('lycra', 1)">❯</button>
-                </div>
-                <div class="product-details">
-                    <div class="product-category">PERFORMANCE</div>
-                    <h3 class="product-name">RASHGUARDS</h3>
-                    <p class="product-description">Compresión con tecnología antimicrobiana. Ideales para No-Gi y MMA, protegen la piel contra quemaduras por roce y mantienen la temperatura.</p>
-                    <ul class="product-features">
-                        <li>Tejido de compresión 4-way stretch</li>
-                        <li>Costuras planas (Flatlock) reforzadas</li>
-                        <li>Banda de silicona en cintura antideslizante</li>
-                        <li>Tecnología anti-olor</li>
                     </ul>
                     <div class="product-badge">MAYORISTA & MINORISTA</div>
                     <a href="#contacto" class="btn-consultar">CONSULTAR PRECIO</a>
@@ -505,11 +630,16 @@
             <div class="product-showcase fade-in-section">
                 <div class="product-image-container">
                     <div class="carousel-wrapper" id="carousel-remeras">
-                        <div class="carousel-slide"><img src="assets/remera-dry.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=DRY+FIT'" alt="Remeras Dry Fit"></div>
-                        <div class="carousel-slide"><img src="assets/remera-dry-atras.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=DRY+FIT+ATRAS'" alt="Remeras Dry Fit Atrás"></div>
+                        <div class="carousel-slide"><img src="assets/compresion-1-lateral.png" alt="Remera Dry Fit de costado"></div>
+                        <div class="carousel-slide"><img src="assets/compresion-1-atras.png" alt="Remera Dry Fit de atrás"></div>
                     </div>
                     <button class="carousel-arrow prev" onclick="moveSlide('remeras', -1)">❮</button>
                     <button class="carousel-arrow next" onclick="moveSlide('remeras', 1)">❯</button>
+                    <div class="variant-selector compact" aria-label="Diseño de la remera Dry Fit">
+                        <button class="variant-button active" style="--swatch-a:#111;--swatch-b:#f2f2f2" type="button" data-remera-variant="1" aria-label="Remera diseño 1, negro y blanco" title="Diseño 1" aria-pressed="true"></button>
+                        <button class="variant-button" style="--swatch-a:#4d4a46;--swatch-b:#15151a" type="button" data-remera-variant="2" aria-label="Remera diseño 2, gris carbón y negro" title="Diseño 2" aria-pressed="false"></button>
+                        <button class="variant-button" style="--swatch-a:#08753f;--swatch-b:#f2c312" type="button" data-remera-variant="3" aria-label="Remera diseño 3, verde y amarillo" title="Diseño 3" aria-pressed="false"></button>
+                    </div>
                 </div>
                 <div class="product-details">
                     <div class="product-category">LIFESTYLE & TRAINING</div>
@@ -520,31 +650,6 @@
                         <li>Secado ultra rápido</li>
                         <li>Estampados de alta durabilidad</li>
                         <li>Cortes modernos y ergonómicos</li>
-                    </ul>
-                    <div class="product-badge" style="background:#333; border-color:#999;">SOLO MINORISTA</div>
-                    <a href="#contacto" class="btn-consultar">CONSULTAR PRECIO</a>
-                </div>
-            </div>
-
-            <div class="product-showcase fade-in-section">
-                <div class="product-image-container">
-                    <div class="carousel-wrapper" id="carousel-algodon">
-                        <div class="carousel-slide"><img src="assets/remera-algodon-frente.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=ALGODON+FRENTE'" alt="Remera Algodón Frente"></div>
-                        <div class="carousel-slide"><img src="assets/remera-algodon-atras.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=ALGODON+ATRAS'" alt="Remera Algodón Atrás"></div>
-                        <div class="carousel-slide"><img src="assets/remera-algodon-detalle.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=ALGODON+DETALLE'" alt="Remera Algodón Detalle"></div>
-                    </div>
-                    <button class="carousel-arrow prev" onclick="moveSlide('algodon', -1)">❮</button>
-                    <button class="carousel-arrow next" onclick="moveSlide('algodon', 1)">❯</button>
-                </div>
-                <div class="product-details">
-                    <div class="product-category">LIFESTYLE</div>
-                    <h3 class="product-name">REMERAS ALGODÓN PREMIUM</h3>
-                    <p class="product-description">Remeras de algodón 100% peinado premium para vestir a tu equipo fuera del tatami. Suavidad excepcional y durabilidad garantizada.</p>
-                    <ul class="product-features">
-                        <li>Algodón 100% Peinado Premium</li>
-                        <li>Textura suave y confortable</li>
-                        <li>Estampados de alta definición</li>
-                        <li>Diseños exclusivos para tu academia</li>
                     </ul>
                     <div class="product-badge" style="background:#333; border-color:#999;">SOLO MINORISTA</div>
                     <a href="#contacto" class="btn-consultar">CONSULTAR PRECIO</a>
@@ -564,7 +669,7 @@
                 </div>
                 <div class="about-card">
                     <h3>NUESTRO COMPROMISO</h3>
-                    <p>Trabajamos con las mejores materias primas del mercado. Cada kimono, rashguard o short pasa por rigurosas pruebas de tracción y resistencia. Nos especializamos en atender tanto a academias y distribuidores mayoristas como a competidores individuales que buscan equipamiento de élite.</p>
+                    <p>Trabajamos con las mejores materias primas del mercado. Cada kimono, remera Dry Fit o short pasa por rigurosas pruebas de tracción y resistencia. Nos especializamos en atender tanto a academias y distribuidores mayoristas como a competidores individuales que buscan equipamiento de élite.</p>
                 </div>
             </div>
         </div>
@@ -606,6 +711,16 @@
             &copy; 2025 KOMBAT WEAR. TODOS LOS DERECHOS RESERVADOS.
         </div>
     </footer>
+
+    <div class="image-lightbox" id="image-lightbox" role="dialog" aria-modal="true" aria-label="Vista ampliada del producto" aria-hidden="true">
+        <button class="lightbox-close" type="button" aria-label="Cerrar imagen ampliada">&times;</button>
+        <img id="lightbox-image" src="" alt="">
+        <div class="lightbox-controls" aria-label="Controles de ampliación">
+            <button class="zoom-out" type="button" aria-label="Alejar">&minus;</button>
+            <button class="zoom-reset" type="button" aria-label="Restablecer ampliación">100%</button>
+            <button class="zoom-in" type="button" aria-label="Acercar">+</button>
+        </div>
+    </div>
 
     <script type="module">
         import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
@@ -667,11 +782,231 @@
         const carousels = {
             'kimono': 0,
             'shorts': 0,
-            'lycra': 0,
             'cinto': 0,
-            'remeras': 0,
-            'algodon': 0
+            'remeras': 0
         };
+
+        const kimonoVariants = {
+            blanco: {
+                images: [
+                    'assets/kimono-blanco-set.png',
+                    'assets/kimono-frente.png',
+                    'assets/kimono-lateral.png',
+                    'assets/kimono-atras.png'
+                ]
+            },
+            azul: {
+                images: [
+                    'assets/kimono-azul-set.png',
+                    'assets/kimono-azul-frente.png',
+                    'assets/kimono-azul-lateral.png',
+                    'assets/kimono-azul-atras.png'
+                ]
+            },
+            negro: {
+                images: [
+                    'assets/kimono-negro-set.png',
+                    'assets/kimono-negro-frente.png',
+                    'assets/kimono-negro-lateral.png',
+                    'assets/kimono-negro-atras.png'
+                ]
+            }
+        };
+
+        const kimonoViewLabels = [
+            'completo con pantalón',
+            'de frente',
+            'de costado',
+            'de atrás'
+        ];
+
+        function selectKimonoVariant(variant) {
+            const config = kimonoVariants[variant];
+            const wrapper = document.getElementById('carousel-kimono');
+            if (!config || !wrapper) return;
+
+            wrapper.querySelectorAll('img').forEach((image, index) => {
+                image.src = config.images[index];
+                image.alt = `Kimono ${variant} ${kimonoViewLabels[index]}`;
+                image.setAttribute('aria-label', `${image.alt}. Abrir imagen ampliada`);
+            });
+
+            carousels.kimono = 0;
+            wrapper.style.transform = 'translateX(0)';
+
+            document.querySelectorAll('[data-kimono-variant]').forEach(button => {
+                const selected = button.dataset.kimonoVariant === variant;
+                button.classList.toggle('active', selected);
+                button.setAttribute('aria-pressed', String(selected));
+            });
+        }
+
+        document.querySelectorAll('[data-kimono-variant]').forEach(button => {
+            button.addEventListener('click', () => {
+                selectKimonoVariant(button.dataset.kimonoVariant);
+            });
+        });
+
+        const shortVariants = {
+            1: ['assets/short-1-lateral.png', 'assets/short-1-atras.png'],
+            2: ['assets/short-2-lateral.png', 'assets/short-2-atras.png'],
+            3: ['assets/short-3-lateral.png', 'assets/short-3-atras.png'],
+            4: ['assets/short-4-lateral.png', 'assets/short-4-atras.png']
+        };
+
+        const remeraVariants = {
+            1: ['assets/compresion-1-lateral.png', 'assets/compresion-1-atras.png'],
+            2: ['assets/compresion-2-lateral.png', 'assets/compresion-2-atras.png'],
+            3: ['assets/compresion-3-lateral.png', 'assets/compresion-3-atras.png']
+        };
+
+        function selectProductVariant(product, variant, variants, buttonSelector) {
+            const images = variants[variant];
+            const wrapper = document.getElementById(`carousel-${product}`);
+            if (!images || !wrapper) return;
+
+            wrapper.querySelectorAll('img').forEach((image, index) => {
+                image.src = images[index];
+                image.alt = `${product === 'shorts' ? 'Fight short' : 'Remera Dry Fit'} diseño ${variant} ${index === 0 ? 'de costado' : 'de atrás'}`;
+                image.setAttribute('aria-label', `${image.alt}. Abrir imagen ampliada`);
+            });
+
+            carousels[product] = 0;
+            wrapper.style.transform = 'translateX(0)';
+
+            document.querySelectorAll(buttonSelector).forEach(button => {
+                const selected = button.dataset[product === 'shorts' ? 'shortVariant' : 'remeraVariant'] === String(variant);
+                button.classList.toggle('active', selected);
+                button.setAttribute('aria-pressed', String(selected));
+            });
+        }
+
+        document.querySelectorAll('[data-short-variant]').forEach(button => {
+            button.addEventListener('click', () => {
+                selectProductVariant('shorts', button.dataset.shortVariant, shortVariants, '[data-short-variant]');
+            });
+        });
+
+        document.querySelectorAll('[data-remera-variant]').forEach(button => {
+            button.addEventListener('click', () => {
+                selectProductVariant('remeras', button.dataset.remeraVariant, remeraVariants, '[data-remera-variant]');
+            });
+        });
+
+        const lightbox = document.getElementById('image-lightbox');
+        const lightboxImage = document.getElementById('lightbox-image');
+        const lightboxClose = lightbox.querySelector('.lightbox-close');
+        const zoomInButton = lightbox.querySelector('.zoom-in');
+        const zoomOutButton = lightbox.querySelector('.zoom-out');
+        const zoomResetButton = lightbox.querySelector('.zoom-reset');
+        let lightboxTrigger = null;
+        let zoomLevel = 1;
+        let panX = 0;
+        let panY = 0;
+        let dragStart = null;
+        let imageWasDragged = false;
+
+        function renderZoom() {
+            lightboxImage.style.transform = `translate(${panX}px, ${panY}px) scale(${zoomLevel})`;
+            lightboxImage.classList.toggle('zoomed', zoomLevel > 1);
+            zoomResetButton.textContent = `${Math.round(zoomLevel * 100)}%`;
+        }
+
+        function setZoom(nextZoom) {
+            zoomLevel = Math.min(4, Math.max(1, nextZoom));
+            if (zoomLevel === 1) {
+                panX = 0;
+                panY = 0;
+            }
+            renderZoom();
+        }
+
+        function openLightbox(image) {
+            lightboxTrigger = image;
+            lightboxImage.src = image.currentSrc || image.src;
+            lightboxImage.alt = image.alt;
+            lightbox.classList.add('open');
+            lightbox.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+            setZoom(1);
+            lightboxClose.focus();
+        }
+
+        function closeLightbox() {
+            if (!lightbox.classList.contains('open')) return;
+            lightbox.classList.remove('open');
+            lightbox.setAttribute('aria-hidden', 'true');
+            lightboxImage.src = '';
+            document.body.style.overflow = '';
+            setZoom(1);
+            lightboxTrigger?.focus();
+        }
+
+        document.querySelectorAll('.carousel-slide img').forEach(image => {
+            image.tabIndex = 0;
+            image.setAttribute('role', 'button');
+            image.setAttribute('aria-label', `${image.alt}. Abrir imagen ampliada`);
+            image.addEventListener('click', () => openLightbox(image));
+            image.addEventListener('keydown', event => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    openLightbox(image);
+                }
+            });
+
+            const zoomButton = document.createElement('button');
+            zoomButton.type = 'button';
+            zoomButton.className = 'zoom-trigger';
+            zoomButton.innerHTML = '&#128269;';
+            zoomButton.setAttribute('aria-label', `Usar lupa en ${image.alt}`);
+            zoomButton.addEventListener('click', event => {
+                event.stopPropagation();
+                openLightbox(image);
+            });
+            image.closest('.carousel-slide').appendChild(zoomButton);
+        });
+
+        zoomInButton.addEventListener('click', () => setZoom(zoomLevel + 0.5));
+        zoomOutButton.addEventListener('click', () => setZoom(zoomLevel - 0.5));
+        zoomResetButton.addEventListener('click', () => setZoom(1));
+        lightboxImage.addEventListener('click', () => {
+            if (imageWasDragged) {
+                imageWasDragged = false;
+                return;
+            }
+            setZoom(zoomLevel === 1 ? 2 : 1);
+        });
+        lightboxImage.addEventListener('wheel', event => {
+            event.preventDefault();
+            setZoom(zoomLevel + (event.deltaY < 0 ? 0.25 : -0.25));
+        }, { passive: false });
+        lightboxImage.addEventListener('pointerdown', event => {
+            if (zoomLevel === 1) return;
+            dragStart = { x: event.clientX - panX, y: event.clientY - panY };
+            imageWasDragged = false;
+            lightboxImage.classList.add('dragging');
+            lightboxImage.setPointerCapture(event.pointerId);
+        });
+        lightboxImage.addEventListener('pointermove', event => {
+            if (!dragStart) return;
+            imageWasDragged = true;
+            panX = event.clientX - dragStart.x;
+            panY = event.clientY - dragStart.y;
+            renderZoom();
+        });
+        lightboxImage.addEventListener('pointerup', event => {
+            dragStart = null;
+            lightboxImage.classList.remove('dragging');
+            lightboxImage.releasePointerCapture(event.pointerId);
+        });
+
+        lightboxClose.addEventListener('click', closeLightbox);
+        lightbox.addEventListener('click', event => {
+            if (event.target === lightbox) closeLightbox();
+        });
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape') closeLightbox();
+        });
 
         function moveSlide(id, direction) {
             const wrapper = document.getElementById(`carousel-${id}`);
