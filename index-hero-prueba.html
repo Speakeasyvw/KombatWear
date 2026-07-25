@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kombat Wear - Performance Combat Gear</title>
+    <link rel="icon" href="assets/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <link rel="apple-touch-icon" href="assets/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -68,16 +71,18 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 100px; height: 100px;
-            border: 4px solid var(--primary);
-            color: var(--primary);
-            font-family: 'Teko', sans-serif;
-            font-size: 4.5rem;
-            font-weight: 700;
+            width: clamp(118px, 12vw, 156px);
+            height: clamp(118px, 12vw, 156px);
             margin-bottom: 1rem;
-            background: rgba(0,0,0,0.5);
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
             animation: fadeInDown 1s ease;
+            filter: drop-shadow(0 0 16px rgba(220, 38, 38, 0.35)) drop-shadow(0 12px 24px rgba(0, 0, 0, 0.75));
+        }
+
+        .brand-logo img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         .logo-text {
@@ -202,6 +207,14 @@
             height: 2px;
             background: var(--primary);
             box-shadow: 0 0 16px rgba(220,38,38,0.8);
+        }
+        .hero-mark {
+            display: block;
+            width: clamp(82px, 8vw, 112px);
+            height: auto;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 14px rgba(220,38,38,0.32)) drop-shadow(0 10px 22px rgba(0,0,0,0.7));
+            animation: fadeInDown 0.8s ease both;
         }
         .hero-test .logo-text {
             max-width: 620px;
@@ -369,8 +382,9 @@
         /* Estilos Internos de Producto */
         .carousel-wrapper {
             display: flex; height: 100%;
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.18s ease;
         }
+        .carousel-wrapper.is-loading { opacity: 0.58; }
         .carousel-slide {
             min-width: 100%; height: 100%;
             display: flex; align-items: center; justify-content: center;
@@ -390,28 +404,49 @@
             display: none;
             align-items: center;
             justify-content: center;
-            padding: 4.5rem 1.5rem 2rem;
+            padding: 0;
             background: rgba(0, 0, 0, 0.94);
             backdrop-filter: blur(12px);
         }
         .image-lightbox.open { display: flex; }
-        .image-lightbox img {
+        .lightbox-stage {
+            position: absolute;
+            inset: 4.5rem 1.25rem 4.8rem;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            border-radius: 10px;
+            touch-action: none;
+        }
+        .lightbox-stage img {
             width: auto;
             height: auto;
-            max-width: min(94vw, 1500px);
-            max-height: 88vh;
+            max-width: 100%;
+            max-height: 100%;
             object-fit: contain;
             filter: drop-shadow(0 24px 60px rgba(0,0,0,0.8));
             cursor: zoom-in;
             touch-action: none;
             user-select: none;
-            transition: transform 0.18s ease;
+            will-change: transform;
+            transition: transform 0.12s ease-out;
         }
-        .image-lightbox img.zoomed {
+        .lightbox-stage img.zoomed {
             cursor: grab;
             transition: none;
         }
-        .image-lightbox img.dragging { cursor: grabbing; }
+        .lightbox-stage img.dragging { cursor: grabbing; }
+        .lightbox-help {
+            position: fixed;
+            top: 1.35rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #aaa;
+            font-size: 0.82rem;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            pointer-events: none;
+        }
         .zoom-trigger {
             position: absolute;
             right: 1.2rem;
@@ -461,6 +496,14 @@
             font-family: 'Teko', sans-serif;
             font-size: 1rem;
             letter-spacing: 1px;
+        }
+        .lightbox-controls button:disabled {
+            opacity: 0.35;
+            cursor: default;
+        }
+        @media (max-width: 640px) {
+            .lightbox-stage { inset: 4.3rem 0.5rem 4.7rem; }
+            .lightbox-help { top: 1.55rem; font-size: 0.72rem; }
         }
         .lightbox-close {
             position: fixed;
@@ -700,6 +743,7 @@
         <canvas id="bg-canvas"></canvas>
         <div class="hero-layout">
             <div class="hero-copy">
+                <img class="hero-mark" src="assets/logo-kombat-gi.webp" alt="Logo Kombat Wear Jiu-Jitsu">
                 <div class="hero-eyebrow">Indumentaria técnica de combate</div>
                 <h1 class="logo-text">Kombat <span>Wear</span></h1>
                 <p class="tagline">Forjamos la vestidura de los que no se rinden</p>
@@ -713,7 +757,7 @@
                 </div>
             </div>
             <div class="hero-product-stage">
-                <img class="hero-product" src="assets/kimono-blanco-set.png" alt="Kimono Kombat Wear blanco completo con pantalón">
+                <img class="hero-product" src="assets/kimono-blanco-set.webp" alt="Kimono Kombat Wear blanco completo con pantalón">
                 <div class="hero-product-note">Kimono Pro · Pearl Weave 450gsm</div>
             </div>
         </div>
@@ -728,10 +772,10 @@
             <div class="product-showcase fade-in-section">
                 <div class="product-image-container">
                     <div class="carousel-wrapper" id="carousel-kimono">
-                        <div class="carousel-slide"><img src="assets/kimono-blanco-set.png" alt="Kimono blanco completo con pantalón"></div>
-                        <div class="carousel-slide"><img src="assets/kimono-frente.png" alt="Kimono blanco de frente"></div>
-                        <div class="carousel-slide"><img src="assets/kimono-lateral.png" alt="Kimono blanco de costado"></div>
-                        <div class="carousel-slide"><img src="assets/kimono-atras.png" alt="Kimono blanco de atrás"></div>
+                        <div class="carousel-slide"><img src="assets/kimono-blanco-set.webp" alt="Kimono blanco completo con pantalón"></div>
+                        <div class="carousel-slide"><img src="assets/kimono-frente.webp" alt="Kimono blanco de frente"></div>
+                        <div class="carousel-slide"><img src="assets/kimono-lateral.webp" alt="Kimono blanco de costado"></div>
+                        <div class="carousel-slide"><img src="assets/kimono-atras.webp" alt="Kimono blanco de atrás"></div>
                     </div>
                     <button class="carousel-arrow prev" onclick="moveSlide('kimono', -1)">❮</button>
                     <button class="carousel-arrow next" onclick="moveSlide('kimono', 1)">❯</button>
@@ -759,8 +803,8 @@
             <div class="product-showcase fade-in-section">
                 <div class="product-image-container">
                     <div class="carousel-wrapper" id="carousel-shorts">
-                        <div class="carousel-slide"><img src="assets/short-1-lateral.png" alt="Fight short de costado"></div>
-                        <div class="carousel-slide"><img src="assets/short-1-atras.png" alt="Fight short de atrás"></div>
+                        <div class="carousel-slide"><img src="assets/short-1-lateral.webp" alt="Fight short de costado"></div>
+                        <div class="carousel-slide"><img src="assets/short-1-atras.webp" alt="Fight short de atrás"></div>
                     </div>
                     <button class="carousel-arrow prev" onclick="moveSlide('shorts', -1)">❮</button>
                     <button class="carousel-arrow next" onclick="moveSlide('shorts', 1)">❯</button>
@@ -769,6 +813,11 @@
                         <button class="variant-button" style="--swatch-a:#f3f3f3;--swatch-b:#111" type="button" data-short-variant="2" aria-label="Short diseño 2, blanco y negro" title="Diseño 2" aria-pressed="false"></button>
                         <button class="variant-button" style="--swatch-a:#111;--swatch-b:#666" type="button" data-short-variant="3" aria-label="Short diseño 3, negro y gris" title="Diseño 3" aria-pressed="false"></button>
                         <button class="variant-button" style="--swatch-a:#08753f;--swatch-b:#f2c312" type="button" data-short-variant="4" aria-label="Short diseño 4, verde y amarillo" title="Diseño 4" aria-pressed="false"></button>
+                        <button class="variant-button" style="--swatch-a:#f05aa6;--swatch-b:#111" type="button" data-short-variant="5" aria-label="Short diseño 5, rosa y negro" title="Diseño 5" aria-pressed="false"></button>
+                        <button class="variant-button" style="--swatch-a:#2455a6;--swatch-b:#d84b31" type="button" data-short-variant="6" aria-label="Short diseño 6, azul y rojo" title="Diseño 6" aria-pressed="false"></button>
+                        <button class="variant-button" style="--swatch-a:#f5f2e9;--swatch-b:#2455a6" type="button" data-short-variant="7" aria-label="Short diseño 7, blanco y azul" title="Diseño 7" aria-pressed="false"></button>
+                        <button class="variant-button" style="--swatch-a:#111;--swatch-b:#f2f2f2" type="button" data-short-variant="8" aria-label="Short diseño 8, negro y blanco Beast Mode" title="Diseño 8" aria-pressed="false"></button>
+                        <button class="variant-button" style="--swatch-a:#111;--swatch-b:#d93626" type="button" data-short-variant="9" aria-label="Short diseño 9, negro y rojo Jiu-Jitsu" title="Diseño 9" aria-pressed="false"></button>
                     </div>
                 </div>
                 <div class="product-details">
@@ -789,11 +838,8 @@
             <div class="product-showcase fade-in-section">
                 <div class="product-image-container">
                     <div class="carousel-wrapper" id="carousel-cinto">
-                        <div class="carousel-slide"><img src="assets/cinturones.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=CINTURONES'" alt="Cinturones"></div>
-                        <div class="carousel-slide"><img src="assets/cinturones-detalle.png" onerror="this.src='https://via.placeholder.com/400x500/111/dc2626?text=DETALLE+CINTURONES'" alt="Cinturones Detalle"></div>
+                        <div class="carousel-slide"><img src="assets/cinturones-colores.webp" alt="Cinturones de jiu-jitsu en negro, azul, marrón, violeta y blanco"></div>
                     </div>
-                    <button class="carousel-arrow prev" onclick="moveSlide('cinto', -1)">❮</button>
-                    <button class="carousel-arrow next" onclick="moveSlide('cinto', 1)">❯</button>
                 </div>
                 <div class="product-details">
                     <div class="product-category">GRADUACIÓN</div>
@@ -813,8 +859,8 @@
             <div class="product-showcase fade-in-section">
                 <div class="product-image-container">
                     <div class="carousel-wrapper" id="carousel-remeras">
-                        <div class="carousel-slide"><img src="assets/compresion-1-lateral.png" alt="Remera Dry Fit de costado"></div>
-                        <div class="carousel-slide"><img src="assets/compresion-1-atras.png" alt="Remera Dry Fit de atrás"></div>
+                        <div class="carousel-slide"><img src="assets/compresion-1-lateral.webp" alt="Remera Dry Fit de costado"></div>
+                        <div class="carousel-slide"><img src="assets/compresion-1-atras.webp" alt="Remera Dry Fit de atrás"></div>
                     </div>
                     <button class="carousel-arrow prev" onclick="moveSlide('remeras', -1)">❮</button>
                     <button class="carousel-arrow next" onclick="moveSlide('remeras', 1)">❯</button>
@@ -822,6 +868,8 @@
                         <button class="variant-button active" style="--swatch-a:#111;--swatch-b:#f2f2f2" type="button" data-remera-variant="1" aria-label="Remera diseño 1, negro y blanco" title="Diseño 1" aria-pressed="true"></button>
                         <button class="variant-button" style="--swatch-a:#4d4a46;--swatch-b:#15151a" type="button" data-remera-variant="2" aria-label="Remera diseño 2, gris carbón y negro" title="Diseño 2" aria-pressed="false"></button>
                         <button class="variant-button" style="--swatch-a:#08753f;--swatch-b:#f2c312" type="button" data-remera-variant="3" aria-label="Remera diseño 3, verde y amarillo" title="Diseño 3" aria-pressed="false"></button>
+                        <button class="variant-button" style="--swatch-a:#f5f2e9;--swatch-b:#2455a6" type="button" data-remera-variant="4" aria-label="Remera diseño 4, blanco y azul" title="Diseño 4" aria-pressed="false"></button>
+                        <button class="variant-button" style="--swatch-a:#f05aa6;--swatch-b:#111" type="button" data-remera-variant="5" aria-label="Remera diseño 5, rosa y negro" title="Diseño 5" aria-pressed="false"></button>
                     </div>
                 </div>
                 <div class="product-details">
@@ -897,7 +945,10 @@
 
     <div class="image-lightbox" id="image-lightbox" role="dialog" aria-modal="true" aria-label="Vista ampliada del producto" aria-hidden="true">
         <button class="lightbox-close" type="button" aria-label="Cerrar imagen ampliada">&times;</button>
-        <img id="lightbox-image" src="" alt="">
+        <div class="lightbox-help">Rueda o +/− para ampliar · arrastrá para recorrer</div>
+        <div class="lightbox-stage">
+            <img id="lightbox-image" src="" alt="">
+        </div>
         <div class="lightbox-controls" aria-label="Controles de ampliación">
             <button class="zoom-out" type="button" aria-label="Alejar">&minus;</button>
             <button class="zoom-reset" type="button" aria-label="Restablecer ampliación">100%</button>
@@ -992,26 +1043,26 @@
         const kimonoVariants = {
             blanco: {
                 images: [
-                    'assets/kimono-blanco-set.png',
-                    'assets/kimono-frente.png',
-                    'assets/kimono-lateral.png',
-                    'assets/kimono-atras.png'
+                    'assets/kimono-blanco-set.webp',
+                    'assets/kimono-frente.webp',
+                    'assets/kimono-lateral.webp',
+                    'assets/kimono-atras.webp'
                 ]
             },
             azul: {
                 images: [
-                    'assets/kimono-azul-set.png',
-                    'assets/kimono-azul-frente.png',
-                    'assets/kimono-azul-lateral.png',
-                    'assets/kimono-azul-atras.png'
+                    'assets/kimono-azul-set.webp',
+                    'assets/kimono-azul-frente.webp',
+                    'assets/kimono-azul-lateral.webp',
+                    'assets/kimono-azul-atras.webp'
                 ]
             },
             negro: {
                 images: [
-                    'assets/kimono-negro-set.png',
-                    'assets/kimono-negro-frente.png',
-                    'assets/kimono-negro-lateral.png',
-                    'assets/kimono-negro-atras.png'
+                    'assets/kimono-negro-set.webp',
+                    'assets/kimono-negro-frente.webp',
+                    'assets/kimono-negro-lateral.webp',
+                    'assets/kimono-negro-atras.webp'
                 ]
             }
         };
@@ -1023,10 +1074,42 @@
             'de atrás'
         ];
 
-        function selectKimonoVariant(variant) {
+        const variantImageCache = new Map();
+
+        function preloadVariantImages(urls) {
+            return Promise.all(urls.map(url => {
+                if (variantImageCache.has(url)) return variantImageCache.get(url);
+                const task = new Promise(resolve => {
+                    const preload = new Image();
+                    preload.onload = async () => {
+                        try { await preload.decode(); } catch (_) {}
+                        resolve(url);
+                    };
+                    preload.onerror = () => resolve(url);
+                    preload.src = url;
+                });
+                variantImageCache.set(url, task);
+                return task;
+            }));
+        }
+
+        async function selectKimonoVariant(variant) {
             const config = kimonoVariants[variant];
             const wrapper = document.getElementById('carousel-kimono');
             if (!config || !wrapper) return;
+
+            const requestKey = Symbol(variant);
+            wrapper.variantRequest = requestKey;
+            wrapper.classList.add('is-loading');
+
+            document.querySelectorAll('[data-kimono-variant]').forEach(button => {
+                const selected = button.dataset.kimonoVariant === variant;
+                button.classList.toggle('active', selected);
+                button.setAttribute('aria-pressed', String(selected));
+            });
+
+            await preloadVariantImages(config.images);
+            if (wrapper.variantRequest !== requestKey) return;
 
             wrapper.querySelectorAll('img').forEach((image, index) => {
                 image.src = config.images[index];
@@ -1036,12 +1119,7 @@
 
             carousels.kimono = 0;
             wrapper.style.transform = 'translateX(0)';
-
-            document.querySelectorAll('[data-kimono-variant]').forEach(button => {
-                const selected = button.dataset.kimonoVariant === variant;
-                button.classList.toggle('active', selected);
-                button.setAttribute('aria-pressed', String(selected));
-            });
+            wrapper.classList.remove('is-loading');
         }
 
         document.querySelectorAll('[data-kimono-variant]').forEach(button => {
@@ -1051,22 +1129,54 @@
         });
 
         const shortVariants = {
-            1: ['assets/short-1-lateral.png', 'assets/short-1-atras.png'],
-            2: ['assets/short-2-lateral.png', 'assets/short-2-atras.png'],
-            3: ['assets/short-3-lateral.png', 'assets/short-3-atras.png'],
-            4: ['assets/short-4-lateral.png', 'assets/short-4-atras.png']
+            1: ['assets/short-1-lateral.webp', 'assets/short-1-atras.webp'],
+            2: ['assets/short-2-lateral.webp', 'assets/short-2-atras.webp'],
+            3: ['assets/short-3-lateral.webp', 'assets/short-3-atras.webp'],
+            4: ['assets/short-4-lateral.webp', 'assets/short-4-atras.webp'],
+            5: ['assets/short-5-lateral.webp', 'assets/short-5-atras.webp'],
+            6: ['assets/short-6-lateral.webp', 'assets/short-6-atras.webp'],
+            7: ['assets/short-7-lateral.webp', 'assets/short-7-atras.webp'],
+            8: ['assets/short-8-lateral.webp', 'assets/short-8-atras.webp'],
+            9: ['assets/short-9-lateral.webp', 'assets/short-9-atras.webp']
         };
 
         const remeraVariants = {
-            1: ['assets/compresion-1-lateral.png', 'assets/compresion-1-atras.png'],
-            2: ['assets/compresion-2-lateral.png', 'assets/compresion-2-atras.png'],
-            3: ['assets/compresion-3-lateral.png', 'assets/compresion-3-atras.png']
+            1: ['assets/compresion-1-lateral.webp', 'assets/compresion-1-atras.webp'],
+            2: ['assets/compresion-2-lateral.webp', 'assets/compresion-2-atras.webp'],
+            3: ['assets/compresion-3-lateral.webp', 'assets/compresion-3-atras.webp'],
+            4: ['assets/compresion-4-lateral.webp', 'assets/compresion-4-atras.webp'],
+            5: ['assets/compresion-5-lateral.webp', 'assets/compresion-5-atras.webp']
         };
 
-        function selectProductVariant(product, variant, variants, buttonSelector) {
+        const allVariantImages = [
+            ...Object.values(kimonoVariants).flatMap(config => config.images),
+            ...Object.values(shortVariants).flat(),
+            ...Object.values(remeraVariants).flat()
+        ];
+
+        window.addEventListener('load', () => {
+            const warmCache = () => preloadVariantImages(allVariantImages);
+            if ('requestIdleCallback' in window) requestIdleCallback(warmCache, { timeout: 1800 });
+            else setTimeout(warmCache, 350);
+        }, { once: true });
+
+        async function selectProductVariant(product, variant, variants, buttonSelector) {
             const images = variants[variant];
             const wrapper = document.getElementById(`carousel-${product}`);
             if (!images || !wrapper) return;
+
+            const requestKey = Symbol(`${product}-${variant}`);
+            wrapper.variantRequest = requestKey;
+            wrapper.classList.add('is-loading');
+
+            document.querySelectorAll(buttonSelector).forEach(button => {
+                const selected = button.dataset[product === 'shorts' ? 'shortVariant' : 'remeraVariant'] === String(variant);
+                button.classList.toggle('active', selected);
+                button.setAttribute('aria-pressed', String(selected));
+            });
+
+            await preloadVariantImages(images);
+            if (wrapper.variantRequest !== requestKey) return;
 
             wrapper.querySelectorAll('img').forEach((image, index) => {
                 image.src = images[index];
@@ -1076,12 +1186,7 @@
 
             carousels[product] = 0;
             wrapper.style.transform = 'translateX(0)';
-
-            document.querySelectorAll(buttonSelector).forEach(button => {
-                const selected = button.dataset[product === 'shorts' ? 'shortVariant' : 'remeraVariant'] === String(variant);
-                button.classList.toggle('active', selected);
-                button.setAttribute('aria-pressed', String(selected));
-            });
+            wrapper.classList.remove('is-loading');
         }
 
         document.querySelectorAll('[data-short-variant]').forEach(button => {
@@ -1096,7 +1201,24 @@
             });
         });
 
+        document.querySelectorAll('[data-kimono-variant]').forEach(button => {
+            const warm = () => preloadVariantImages(kimonoVariants[button.dataset.kimonoVariant].images);
+            button.addEventListener('pointerenter', warm, { once: true });
+            button.addEventListener('focus', warm, { once: true });
+        });
+        document.querySelectorAll('[data-short-variant]').forEach(button => {
+            const warm = () => preloadVariantImages(shortVariants[button.dataset.shortVariant]);
+            button.addEventListener('pointerenter', warm, { once: true });
+            button.addEventListener('focus', warm, { once: true });
+        });
+        document.querySelectorAll('[data-remera-variant]').forEach(button => {
+            const warm = () => preloadVariantImages(remeraVariants[button.dataset.remeraVariant]);
+            button.addEventListener('pointerenter', warm, { once: true });
+            button.addEventListener('focus', warm, { once: true });
+        });
+
         const lightbox = document.getElementById('image-lightbox');
+        const lightboxStage = lightbox.querySelector('.lightbox-stage');
         const lightboxImage = document.getElementById('lightbox-image');
         const lightboxClose = lightbox.querySelector('.lightbox-close');
         const zoomInButton = lightbox.querySelector('.zoom-in');
@@ -1107,16 +1229,28 @@
         let panX = 0;
         let panY = 0;
         let dragStart = null;
-        let imageWasDragged = false;
+        let pinchStartDistance = 0;
+        let pinchStartZoom = 1;
+        const activePointers = new Map();
+
+        function clampPan() {
+            const maxX = Math.max(0, (lightboxImage.clientWidth * zoomLevel - lightboxStage.clientWidth) / 2);
+            const maxY = Math.max(0, (lightboxImage.clientHeight * zoomLevel - lightboxStage.clientHeight) / 2);
+            panX = Math.max(-maxX, Math.min(maxX, panX));
+            panY = Math.max(-maxY, Math.min(maxY, panY));
+        }
 
         function renderZoom() {
+            clampPan();
             lightboxImage.style.transform = `translate(${panX}px, ${panY}px) scale(${zoomLevel})`;
             lightboxImage.classList.toggle('zoomed', zoomLevel > 1);
             zoomResetButton.textContent = `${Math.round(zoomLevel * 100)}%`;
+            zoomOutButton.disabled = zoomLevel <= 1;
+            zoomInButton.disabled = zoomLevel >= 5;
         }
 
         function setZoom(nextZoom) {
-            zoomLevel = Math.min(4, Math.max(1, nextZoom));
+            zoomLevel = Math.min(5, Math.max(1, nextZoom));
             if (zoomLevel === 1) {
                 panX = 0;
                 panY = 0;
@@ -1141,6 +1275,8 @@
             lightbox.setAttribute('aria-hidden', 'true');
             lightboxImage.src = '';
             document.body.style.overflow = '';
+            activePointers.clear();
+            dragStart = null;
             setZoom(1);
             lightboxTrigger?.focus();
         }
@@ -1172,36 +1308,63 @@
         zoomInButton.addEventListener('click', () => setZoom(zoomLevel + 0.5));
         zoomOutButton.addEventListener('click', () => setZoom(zoomLevel - 0.5));
         zoomResetButton.addEventListener('click', () => setZoom(1));
-        lightboxImage.addEventListener('click', () => {
-            if (imageWasDragged) {
-                imageWasDragged = false;
-                return;
-            }
-            setZoom(zoomLevel === 1 ? 2 : 1);
+        lightboxImage.addEventListener('load', renderZoom);
+        lightboxImage.addEventListener('dblclick', event => {
+            event.preventDefault();
+            setZoom(zoomLevel === 1 ? 2.5 : 1);
         });
-        lightboxImage.addEventListener('wheel', event => {
+        lightboxStage.addEventListener('wheel', event => {
             event.preventDefault();
             setZoom(zoomLevel + (event.deltaY < 0 ? 0.25 : -0.25));
         }, { passive: false });
-        lightboxImage.addEventListener('pointerdown', event => {
-            if (zoomLevel === 1) return;
-            dragStart = { x: event.clientX - panX, y: event.clientY - panY };
-            imageWasDragged = false;
+
+        function pointerDistance() {
+            const [a, b] = [...activePointers.values()];
+            return Math.hypot(b.x - a.x, b.y - a.y);
+        }
+
+        lightboxStage.addEventListener('pointerdown', event => {
+            if (event.target !== lightboxImage && zoomLevel === 1) return;
+            activePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+            lightboxStage.setPointerCapture(event.pointerId);
+
+            if (activePointers.size === 2) {
+                pinchStartDistance = pointerDistance();
+                pinchStartZoom = zoomLevel;
+                dragStart = null;
+            } else if (zoomLevel > 1) {
+                dragStart = { id: event.pointerId, x: event.clientX, y: event.clientY, panX, panY };
+            }
             lightboxImage.classList.add('dragging');
-            lightboxImage.setPointerCapture(event.pointerId);
         });
-        lightboxImage.addEventListener('pointermove', event => {
-            if (!dragStart) return;
-            imageWasDragged = true;
-            panX = event.clientX - dragStart.x;
-            panY = event.clientY - dragStart.y;
-            renderZoom();
+
+        lightboxStage.addEventListener('pointermove', event => {
+            if (!activePointers.has(event.pointerId)) return;
+            activePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+            if (activePointers.size === 2 && pinchStartDistance > 0) {
+                setZoom(pinchStartZoom * (pointerDistance() / pinchStartDistance));
+            } else if (dragStart && dragStart.id === event.pointerId && zoomLevel > 1) {
+                panX = dragStart.panX + event.clientX - dragStart.x;
+                panY = dragStart.panY + event.clientY - dragStart.y;
+                renderZoom();
+            }
         });
-        lightboxImage.addEventListener('pointerup', event => {
+
+        function releasePointer(event) {
+            activePointers.delete(event.pointerId);
             dragStart = null;
-            lightboxImage.classList.remove('dragging');
-            lightboxImage.releasePointerCapture(event.pointerId);
-        });
+            pinchStartDistance = 0;
+            if (activePointers.size === 1 && zoomLevel > 1) {
+                const [id, point] = [...activePointers.entries()][0];
+                dragStart = { id, x: point.x, y: point.y, panX, panY };
+            }
+            if (activePointers.size === 0) lightboxImage.classList.remove('dragging');
+        }
+
+        lightboxStage.addEventListener('pointerup', releasePointer);
+        lightboxStage.addEventListener('pointercancel', releasePointer);
+        window.addEventListener('resize', renderZoom);
 
         lightboxClose.addEventListener('click', closeLightbox);
         lightbox.addEventListener('click', event => {
@@ -1209,6 +1372,10 @@
         });
         document.addEventListener('keydown', event => {
             if (event.key === 'Escape') closeLightbox();
+            if (!lightbox.classList.contains('open')) return;
+            if (event.key === '+' || event.key === '=') setZoom(zoomLevel + 0.5);
+            if (event.key === '-') setZoom(zoomLevel - 0.5);
+            if (event.key === '0') setZoom(1);
         });
 
         function moveSlide(id, direction) {
